@@ -1,0 +1,1 @@
+{"version":3,"file":"RankingPage.js","sources":["../../../HBuilderX/plugins/uniapp-cli-vite/uniPage:/cGFnZXMvUmFua2luZ1BhZ2UvUmFua2luZ1BhZ2UudnVl"],"sourcesContent":["import MiniProgramPage from 'D:/sitp项目/miniprogram/bird-frontend/pages/RankingPage/RankingPage.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;AACA,GAAG,WAAW,eAAe;"}

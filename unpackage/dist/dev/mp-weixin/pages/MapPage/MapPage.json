@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "地图",
+  "usingComponents": {
+    "tab-bar": "../../components/tabbar"
+  }
+}

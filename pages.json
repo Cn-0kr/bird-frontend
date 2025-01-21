@@ -1,0 +1,102 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path" : "pages/HomePage/HomePage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "首页"
+			}
+		},
+		{
+			"path" : "pages/UploadPage/UploadPage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "上传图片"
+			}
+		},
+		{
+			"path" : "pages/MapPage/MapPage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "地图"
+			}
+		},
+		{
+			"path" : "pages/ProfilePage/ProfilePage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的"
+			}
+		},
+		{
+			"path" : "pages/RankingPage/RankingPage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "排行榜"
+			}
+		},
+		{
+			"path" : "pages/NoobPage/NoobPage",
+			"style" : 
+			{
+				"navigationBarTitleText" : "新手须知"
+			}
+		},
+		{
+			"path" : "pages/PosterPage/PosterPage",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/AnalyzeResultPage/AnalyzeResultPage",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/AnalyzeWaitingPage/AnalyzeWaitingPage",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		}
+	],
+	"tabBar": {
+	    "custom": true,
+	    "list": [
+	      {
+	        "pagePath": "pages/HomePage/HomePage",
+	        "text": "首页"
+	      },
+	      {
+	        "pagePath": "pages/MapPage/MapPage",
+	        "text": "地图"
+	      },
+	      {
+	        "pagePath": "pages/UploadPage/UploadPage",
+	        "text": "上传"
+	      },
+	      {
+	        "pagePath": "pages/ProfilePage/ProfilePage",
+	        "text": "我的"
+	      }
+	    ]
+	},
+	  
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "云雀解码",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"easycom": {
+	    "autoscan": true,
+	    "custom": {
+	      "^homeposter": "@/components/homeposter.vue"
+	    }
+	},
+	"uniIdRouter": {}
+}

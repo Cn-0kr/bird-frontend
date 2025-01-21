@@ -1,0 +1,43 @@
+
+.poster.data-v-2db382c6 {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+.poster-image.data-v-2db382c6 {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+}
+.poster-content.data-v-2db382c6 {
+  padding: 8px 12px;
+}
+.description.data-v-2db382c6 {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.interaction-info.data-v-2db382c6 {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+.info-item.data-v-2db382c6 {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+.icon.data-v-2db382c6 {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+.info-item text.data-v-2db382c6 {
+  font-size: 12px;
+  color: #999;
+}

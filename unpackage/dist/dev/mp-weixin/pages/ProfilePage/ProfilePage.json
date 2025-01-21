@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "我的",
+  "usingComponents": {
+    "tab-bar": "../../components/tabbar",
+    "home-poster": "../../components/homeposter"
+  }
+}

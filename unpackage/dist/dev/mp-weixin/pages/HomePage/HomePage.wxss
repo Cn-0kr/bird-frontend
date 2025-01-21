@@ -1,0 +1,54 @@
+
+.container.data-v-5ab68f47 {
+  min-height: 100vh;
+  background-color: #FFF9E9;
+  padding-bottom: 50px; /* 为底部tabbar留出空间 */
+}
+.top-nav.data-v-5ab68f47 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #FFF9E9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.nav-btn.data-v-5ab68f47 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 2px solid #2EA3B7;
+  background: white;
+}
+.btn-icon.data-v-5ab68f47 {
+  width: 16px;
+  height: 16px;
+}
+.nav-btn text.data-v-5ab68f47 {
+  font-size: 14px;
+  color: #1D1D2B;
+}
+.search-bar.data-v-5ab68f47 {
+  flex: 1;
+  max-width: 150px;
+  margin: 0 15px 0 -20px;
+}
+.search-bar input.data-v-5ab68f47 {
+  width: 100%;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
+  border: 2px solid #FFB03B;
+  background: white;
+}
+.content.data-v-5ab68f47 {
+  padding: 12px;
+}
+.waterfall.data-v-5ab68f47 {
+  display: flex;
+  justify-content: space-between;
+}
+.column.data-v-5ab68f47 {
+  width: 48%; /* 留出间距 */
+}

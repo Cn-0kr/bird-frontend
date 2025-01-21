@@ -1,0 +1,41 @@
+{
+  "pages": [
+    "pages/HomePage/HomePage",
+    "pages/UploadPage/UploadPage",
+    "pages/MapPage/MapPage",
+    "pages/ProfilePage/ProfilePage",
+    "pages/RankingPage/RankingPage",
+    "pages/NoobPage/NoobPage",
+    "pages/PosterPage/PosterPage",
+    "pages/AnalyzeResultPage/AnalyzeResultPage",
+    "pages/AnalyzeWaitingPage/AnalyzeWaitingPage"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "云雀解码",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "custom": true,
+    "list": [
+      {
+        "pagePath": "pages/HomePage/HomePage",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/MapPage/MapPage",
+        "text": "地图"
+      },
+      {
+        "pagePath": "pages/UploadPage/UploadPage",
+        "text": "上传"
+      },
+      {
+        "pagePath": "pages/ProfilePage/ProfilePage",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

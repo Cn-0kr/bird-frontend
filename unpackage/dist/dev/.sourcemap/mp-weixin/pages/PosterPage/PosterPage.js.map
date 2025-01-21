@@ -1,0 +1,1 @@
+{"version":3,"file":"PosterPage.js","sources":["../../../HBuilderX/plugins/uniapp-cli-vite/uniPage:/cGFnZXMvUG9zdGVyUGFnZS9Qb3N0ZXJQYWdlLnZ1ZQ"],"sourcesContent":["import MiniProgramPage from 'D:/sitp项目/miniprogram/bird-frontend/pages/PosterPage/PosterPage.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;AACA,GAAG,WAAW,eAAe;"}

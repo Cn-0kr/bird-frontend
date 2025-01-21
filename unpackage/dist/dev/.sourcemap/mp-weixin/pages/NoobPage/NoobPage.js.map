@@ -1,0 +1,1 @@
+{"version":3,"file":"NoobPage.js","sources":["../../../HBuilderX/plugins/uniapp-cli-vite/uniPage:/cGFnZXMvTm9vYlBhZ2UvTm9vYlBhZ2UudnVl"],"sourcesContent":["import MiniProgramPage from 'D:/sitp项目/miniprogram/bird-frontend/pages/NoobPage/NoobPage.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;AACA,GAAG,WAAW,eAAe;"}
