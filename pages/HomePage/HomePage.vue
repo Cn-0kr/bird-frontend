@@ -2,23 +2,27 @@
   <view class="container">
     <!-- 顶部导航 -->
     <view class="top-nav">
-      <navigator url="/pages/RankingPage/RankingPage" class="nav-btn">
+      <navigator url="/pages/RankingPage/RankingPage" class="nav-btn ranking-btn">
         <image src="/static/icons/ranking.png" class="btn-icon"></image>
         <text>排行榜</text>
       </navigator>
 
-      <view class="search-bar">
-        <input 
-          type="text" 
-          placeholder="搜索鸟类名称..." 
-          v-model="searchText"
-          @input="onSearch"
-        />
+      <view class="search-container">
+        <view class="search-bar">
+          <image src="/static/icons/search.png" class="search-icon"></image>
+          <input 
+            type="text" 
+            placeholder="搜索鸟类名称..." 
+            placeholder-class="search-placeholder"
+            v-model="searchText"
+            @input="onSearch"
+          />
+        </view>
       </view>
 
-      <navigator url="/pages/NoobPage/NoobPage" class="nav-btn">
+      <navigator url="/pages/NoobPage/NoobPage" class="nav-btn guide-btn">
         <image src="/static/icons/guide.png" class="btn-icon"></image>
-        <text>引导</text>
+        <text class="guide-text">引导</text>
       </navigator>
     </view>
 
@@ -30,7 +34,6 @@
 			v-for="poster in leftColumn"
 			:key="poster.id"
 			:poster-data="poster"
-			@tap="navigateToPosterPage(poster.id)"
 		  ></homeposter>
 		</view>
 		
@@ -39,7 +42,6 @@
 			v-for="poster in rightColumn"
 			:key="poster.id"
 			:poster-data="poster"
-			@tap="navigateToPosterPage(poster.id)"
 		  ></homeposter>
 		</view>
 	  </view>
@@ -54,9 +56,6 @@
 import { ref, onMounted } from 'vue';
 import TabBar from '@/components/tabbar.vue';
 import homeposter from '../../components/homeposter.vue'
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 const searchText = ref('');
 const onSearch = () => {
   // 实现搜索逻辑
@@ -101,67 +100,112 @@ const distributePosters = () => {
 onMounted(() => {
   distributePosters();
 });
-
-const navigateToPosterPage = (postId) => {
-  uni.navigateTo({
-    url: `/pages/PosterPage/PosterPage?postId=${postId}`
-  });
-};
 </script>
 
 <style scoped>
 .container {
   min-height: 100vh;
-  background-color: #FFF9E9;
+  background-color: hsl(86, 41%, 72%);
   padding-bottom: 50px; /* 为底部tabbar留出空间 */
 }
-
 .top-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  background-color: #FFF9E9;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 12px 12px;  /* 增加了内边距，确保元素之间有更好的间距 */
+  background-color: hsl(123, 42%, 28%);  /* 改变顶部导航栏的背景色 */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin-bottom: 8px;  /* 添加底部间距 */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);  /* 添加底部边框 */
 }
 
 .nav-btn {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  border-radius: 20px;
-  border: 2px solid #2EA3B7;
-  background: white;
+  gap: 5px;  /* 增加了按钮间距 */
+  padding: 4px 4px;
+  border-radius: 5px;
+  background: linear-gradient(145deg, hsl(84, 45%, 68%), #508c38);
+  transition: all 0.3s ease;
+  min-width: 40px;  /* 调整按钮宽度，确保按钮不重叠 */
+  justify-content: center;
+}
+
+.nav-btn:active {
+  box-shadow: inset 2px 2px 5px rgba(46, 44, 44, 0.1),
+              inset -2px -2px 5px rgba(38, 37, 37, 0.8);
+  transform: scale(0.98);
+}
+
+.ranking-btn {
+  border: 1px solid rgba(38, 83, 42, 0.3);
+}
+
+.guide-btn {
+  border: 1px solid rgba(90, 186, 103, 0.3);
+  margin: 0 0.1px 0 20px; 
+  width: 55px;         /* 设置固定宽度 */
+  height: 20px; 
+         /* 设置固定高度 */
 }
 
 .btn-icon {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
 }
 
 .nav-btn text {
   font-size: 14px;
-  color: #1D1D2B;
+  color: #333;
+  font-weight: 500;
+}
+
+.search-container {
+  flex: 1;
+  max-width: 250px;  /* 增加最大宽度，给搜索框更多空间 */
+  margin: 0 18px 0 5px;
 }
 
 .search-bar {
-  flex: 1;
-  max-width: 150px;
-  margin: 0 15px 0 -20px;
+  position: relative;
+  width: 100%;
+  height: 32px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.05),
+              inset -2px -2px 5px rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+}
+.search-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  opacity: 0.6;
 }
 
 .search-bar input {
-  width: 100%;
-  height: 36px;
-  padding: 0 16px;
-  border-radius: 18px;
-  border: 2px solid #FFB03B;
-  background: white;
+  flex: 1;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+}
+
+.search-placeholder {
+  color: #999;
+  font-size: 14px;
 }
 
 .content {
   padding: 12px;
+  background-color: #fcfcfc;  /* 确保内容区域保持原来的背景色 */
 }
 
 .waterfall {
@@ -171,5 +215,9 @@ const navigateToPosterPage = (postId) => {
 
 .column {
   width: 48%; /* 留出间距 */
+}
+
+.guide-text {
+  font-weight: 900;
 }
 </style>
