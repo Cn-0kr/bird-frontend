@@ -13,17 +13,36 @@ const _sfc_main = {
     const searchText = common_vendor.ref("");
     const markers = common_vendor.ref([]);
     const getCurrentLocation = () => {
+      common_vendor.index.showLoading({
+        title: "定位中..."
+      });
       common_vendor.index.getLocation({
         type: "gcj02",
         success: (res) => {
           latitude.value = res.latitude;
           longitude.value = res.longitude;
-        },
-        fail: () => {
+          scale.value = 16;
           common_vendor.index.showToast({
-            title: "无法获取位置",
-            icon: "none"
+            title: "定位成功",
+            icon: "success",
+            duration: 1500
           });
+        },
+        fail: (err) => {
+          console.error("定位失败：", err);
+          common_vendor.index.showModal({
+            title: "提示",
+            content: "需要获取您的地理位置才能使用此功能",
+            confirmText: "去设置",
+            success: (res) => {
+              if (res.confirm) {
+                common_vendor.index.openSetting();
+              }
+            }
+          });
+        },
+        complete: () => {
+          common_vendor.index.hideLoading();
         }
       });
     };
@@ -52,4 +71,3 @@ const _sfc_main = {
   }
 };
 wx.createPage(_sfc_main);
-//# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/MapPage/MapPage.js.map

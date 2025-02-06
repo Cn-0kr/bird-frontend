@@ -46,7 +46,7 @@
 			"path" : "pages/PosterPage/PosterPage",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle": "custom"
 			}
 		},
 		{
