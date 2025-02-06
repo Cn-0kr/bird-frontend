@@ -9,6 +9,7 @@ const homeposter = () => "../../components/homeposter.js";
 const _sfc_main = {
   __name: "HomePage",
   setup(__props) {
+    common_vendor.useRouter();
     const searchText = common_vendor.ref("");
     const onSearch = () => {
     };
@@ -45,6 +46,11 @@ const _sfc_main = {
     common_vendor.onMounted(() => {
       distributePosters();
     });
+    const navigateToPosterPage = (postId) => {
+      common_vendor.index.navigateTo({
+        url: `/pages/PosterPage/PosterPage?postId=${postId}`
+      });
+    };
     return (_ctx, _cache) => {
       return {
         a: common_assets._imports_0,
@@ -54,8 +60,9 @@ const _sfc_main = {
         e: common_vendor.f(leftColumn.value, (poster, k0, i0) => {
           return {
             a: poster.id,
-            b: "5ab68f47-0-" + i0,
-            c: common_vendor.p({
+            b: common_vendor.o(($event) => navigateToPosterPage(poster.id), poster.id),
+            c: "5ab68f47-0-" + i0,
+            d: common_vendor.p({
               ["poster-data"]: poster
             })
           };
@@ -63,8 +70,9 @@ const _sfc_main = {
         f: common_vendor.f(rightColumn.value, (poster, k0, i0) => {
           return {
             a: poster.id,
-            b: "5ab68f47-1-" + i0,
-            c: common_vendor.p({
+            b: common_vendor.o(($event) => navigateToPosterPage(poster.id), poster.id),
+            c: "5ab68f47-1-" + i0,
+            d: common_vendor.p({
               ["poster-data"]: poster
             })
           };
@@ -75,4 +83,3 @@ const _sfc_main = {
 };
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-5ab68f47"]]);
 wx.createPage(MiniProgramPage);
-//# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/HomePage/HomePage.js.map

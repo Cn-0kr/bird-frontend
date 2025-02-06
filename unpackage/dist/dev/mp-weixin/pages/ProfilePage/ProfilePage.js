@@ -113,7 +113,7 @@ const _sfc_main = {
           this.isLoading = false;
         }, 500);
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/ProfilePage/ProfilePage.vue:231", "Load content error:", error);
+        console.error("Load content error:", error);
         this.isLoading = false;
         common_vendor.index.showToast({
           title: "加载失败",
@@ -190,4 +190,3 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-7b4c7c70"]]);
 wx.createPage(MiniProgramPage);
-//# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/ProfilePage/ProfilePage.js.map

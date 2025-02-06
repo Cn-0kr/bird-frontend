@@ -30,6 +30,7 @@
 			v-for="poster in leftColumn"
 			:key="poster.id"
 			:poster-data="poster"
+			@tap="navigateToPosterPage(poster.id)"
 		  ></homeposter>
 		</view>
 		
@@ -38,6 +39,7 @@
 			v-for="poster in rightColumn"
 			:key="poster.id"
 			:poster-data="poster"
+			@tap="navigateToPosterPage(poster.id)"
 		  ></homeposter>
 		</view>
 	  </view>
@@ -52,6 +54,9 @@
 import { ref, onMounted } from 'vue';
 import TabBar from '@/components/tabbar.vue';
 import homeposter from '../../components/homeposter.vue'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const searchText = ref('');
 const onSearch = () => {
   // 实现搜索逻辑
@@ -96,6 +101,12 @@ const distributePosters = () => {
 onMounted(() => {
   distributePosters();
 });
+
+const navigateToPosterPage = (postId) => {
+  uni.navigateTo({
+    url: `/pages/PosterPage/PosterPage?postId=${postId}`
+  });
+};
 </script>
 
 <style scoped>
