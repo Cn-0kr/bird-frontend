@@ -487,6 +487,7 @@ export default {
 .column {
   width: 48%;
 }
+
 .achievement-item:nth-child(1) .achievement-name {
   font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 13px;
@@ -512,3 +513,4 @@ export default {
 }
 
 </style>
+
