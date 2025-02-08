@@ -1,0 +1,124 @@
+
+.ranking-container.data-v-97c3cf49 {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+.bird-item.data-v-97c3cf49 {
+    display: flex;
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+.bird-item.data-v-97c3cf49:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.rank-number.data-v-97c3cf49 {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-right: 20px;
+    color: #ff6b6b;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.bird-info.data-v-97c3cf49 {
+    flex: 1;
+    margin-right: 20px;
+}
+.bird-info h2.data-v-97c3cf49 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+.details p.data-v-97c3cf49 {
+    margin: 8px 0;
+    color: #666;
+    line-height: 1.6;
+}
+.description.data-v-97c3cf49 {
+    margin: 15px 0;
+    line-height: 1.8;
+    color: #2c3e50;
+}
+.search-count.data-v-97c3cf49 {
+    color: #ff6b6b;
+    font-size: 0.9em;
+    margin-top: 15px;
+}
+.bird-image.data-v-97c3cf49 {
+    display: flex;
+    align-items: center;
+}
+.bird-image img.data-v-97c3cf49 {
+    object-fit: cover;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+.rank-1.data-v-97c3cf49 {
+    width: 100%;
+}
+.rank-1 .bird-image img.data-v-97c3cf49 {
+    width: 300px;
+    height: 300px;
+}
+.rank-2.data-v-97c3cf49 {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.rank-2 .bird-image img.data-v-97c3cf49 {
+    width: 250px;
+    height: 250px;
+}
+.rank-3.data-v-97c3cf49 {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.rank-3 .bird-image img.data-v-97c3cf49 {
+    width: 200px;
+    height: 200px;
+}
+.secondary-ranks.data-v-97c3cf49 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 40px;
+}
+.secondary-ranks .bird-item.data-v-97c3cf49 {
+    width: 100%;
+}
+.secondary-ranks .bird-image img.data-v-97c3cf49 {
+    width: 150px;
+    height: 150px;
+}
+@media (max-width: 1200px) {
+.secondary-ranks.data-v-97c3cf49 {
+        grid-template-columns: 1fr;
+}
+.rank-2.data-v-97c3cf49, .rank-3.data-v-97c3cf49 {
+        width: 100%;
+}
+}
+@media (max-width: 768px) {
+.bird-item.data-v-97c3cf49 {
+        flex-direction: column;
+        width: 100% !important;
+}
+.bird-image.data-v-97c3cf49 {
+        margin-top: 20px;
+}
+.bird-image img.data-v-97c3cf49 {
+        width: 100% !important;
+        height: auto !important;
+}
+.secondary-ranks.data-v-97c3cf49 {
+        grid-template-columns: 1fr;
+}
+}

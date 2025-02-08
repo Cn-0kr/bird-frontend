@@ -47,17 +47,42 @@ const markers = ref([])
 
 // 获取当前位置
 const getCurrentLocation = () => {
+    // 显示加载提示
+    uni.showLoading({
+        title: '定位中...'
+    })
+    
+    // 直接获取位置
     uni.getLocation({
         type: 'gcj02',
         success: (res) => {
             latitude.value = res.latitude
             longitude.value = res.longitude
-        },
-        fail: () => {
+            scale.value = 16 // 放大地图以更清晰地显示位置
+            
             uni.showToast({
-                title: '无法获取位置',
-                icon: 'none'
+                title: '定位成功',
+                icon: 'success',
+                duration: 1500
             })
+        },
+        fail: (err) => {
+            console.error('定位失败：', err)
+            // 当用户拒绝授权时，提示打开设置
+            uni.showModal({
+                title: '提示',
+                content: '需要获取您的地理位置才能使用此功能',
+                confirmText: '去设置',
+                success: (res) => {
+                    if (res.confirm) {
+                        // 打开设置页面
+                        uni.openSetting()
+                    }
+                }
+            })
+        },
+        complete: () => {
+            uni.hideLoading()
         }
     })
 }
@@ -161,9 +186,16 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+    z-index: 100;
 }
 
 .icon-location {
     font-size: 40rpx;
+}
+
+/* 添加点击效果 */
+.location-btn:active {
+    opacity: 0.8;
+    transform: scale(0.95);
 }
 </style>

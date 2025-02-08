@@ -29,7 +29,7 @@ const _sfc_main = {
         common_vendor.index.navigateTo({
           url,
           fail: (err) => {
-            common_vendor.index.__f__("error", "at components/homeposter.vue:61", "Navigation failed:", err);
+            console.error("Navigation failed:", err);
             common_vendor.index.showToast({
               title: "页面跳转失败",
               icon: "none"
@@ -37,7 +37,7 @@ const _sfc_main = {
           }
         });
       } catch (error) {
-        common_vendor.index.__f__("error", "at components/homeposter.vue:69", "Navigation error:", error);
+        console.error("Navigation error:", error);
       }
     }
   }
@@ -56,4 +56,3 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-2db382c6"]]);
 wx.createComponent(Component);
-//# sourceMappingURL=../../.sourcemap/mp-weixin/components/homeposter.js.map

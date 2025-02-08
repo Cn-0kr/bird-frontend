@@ -51,7 +51,14 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+    z-index: 100;
 }
 .icon-location {
     font-size: 40rpx;
+}
+
+/* 添加点击效果 */
+.location-btn:active {
+    opacity: 0.8;
+    transform: scale(0.95);
 }
