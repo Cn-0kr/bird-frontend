@@ -1,223 +1,338 @@
 <template>
-  <view class="container">
-    <!-- 顶部导航 -->
-    <view class="top-nav">
-      <navigator url="/pages/RankingPage/RankingPage" class="nav-btn ranking-btn">
-        <image src="/static/icons/ranking.png" class="btn-icon"></image>
-        <text>排行榜</text>
-      </navigator>
+  <div class="bird-guide">
+	<div class="petals-container">
+      <div v-for="n in 24" :key="n" class="petal"></div>
+    </div>
+    <h1 class="title">菜鸟观鸟全攻略：从装备到寻鸟，做最棒的“抬头族”！</h1>
 
-      <view class="search-container">
-        <view class="search-bar">
-          <image src="/static/icons/search.png" class="search-icon"></image>
-          <input 
-            type="text" 
-            placeholder="搜索鸟类名称..." 
-            placeholder-class="search-placeholder"
-            v-model="searchText"
-            @input="onSearch"
-          />
-        </view>
-      </view>
+    <!-- 欢迎部分 -->
+    <section class="section welcome">
+      <h2 class="section-title">🎉 欢迎加入“鸟人”快乐星球！</h2>
+      <p class="content">
+        你以为观鸟只是退休大爷的爱好？No no no！这是集野外侦查、时尚穿搭、声纹识别于一身的硬核运动！从今天起，你的日常将变成：“刚才飞过去的是白头鹎还是白喉红臀鹎？急，在线等！”
+      </p >
+    </section>
 
-      <navigator url="/pages/NoobPage/NoobPage" class="nav-btn guide-btn">
-        <image src="/static/icons/guide.png" class="btn-icon"></image>
-        <text class="guide-text">引导</text>
-      </navigator>
-    </view>
+    <!-- 装备篇 -->
+    <section class="section">
+      <h2 class="section-title">👜 装备篇：轻量化才是王道</h2>
+      <ul class="list">
+        <li>
+          <strong>1. 望远镜（8×42 新手快乐镜）</strong>
+          <p class="content">
+            别被影视剧骗了！手持天文望远镜会练出麒麟臂。记住口诀：“倍数不过10，口径要够大”，8×42既能看清鸟的翘臀，又能塞进背包侧袋。
+          </p >
+        </li>
+        <li>
+          <strong>2. 鸟类图鉴（电子版更香）</strong>
+          <p class="content">
+            遇到不认识的鸟直接拍照识图，比相亲时查对方朋友圈还高效！
+          </p >
+        </li>
+        <li>
+          <strong>3. 隐身皮肤</strong>
+          <p class="content">
+            荧光色穿搭≈向鸟群发射“人类来袭”警报。建议参考《刺客信条》配色：灰/绿/大地色，混入环境你就是一棵会移动的树！
+          </p >
+        </li>
+        <li>
+          <strong>4. 生存三件套</strong>
+          <ul class="sub-list">
+            <li>驱蚊喷雾（蚊子：这是自助餐入场券）</li>
+            <li>保温杯（观鸟半小时，找厕所两小时）</li>
+            <li>迷你笔记本（记录如“戴胜头顶WiFi信号满格”等迷惑行为）</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
 
-    <!-- 瀑布流内容区域 -->
-	<view class="content">
-	  <view class="waterfall">
-		<view class="column">
-		  <homeposter
-			v-for="poster in leftColumn"
-			:key="poster.id"
-			:poster-data="poster"
-		  ></homeposter>
-		</view>
-		
-		<view class="column">
-		  <homeposter
-			v-for="poster in rightColumn"
-			:key="poster.id"
-			:poster-data="poster"
-		  ></homeposter>
-		</view>
-	  </view>
-	</view>
+    <!-- 寻鸟篇 -->
+    <section class="section">
+      <h2 class="section-title">🔍 寻鸟篇：打开你的“鸟类雷达”</h2>
+      <h3 class="sub-title">📍 鸟界网红打卡地</h3>
+      <ul class="list">
+        <li>
+          <strong>城市CBD（Bird版）</strong>
+          <ul class="sub-list">
+            <li>湿地公园：鹭鸟走T台，小䴙䴘玩潜水，夜鹭站在树顶思考鸟生</li>
+            <li>小区绿化带：麻雀开早市，乌鸫翻落叶找蚯蚓，珠颈斑鸠在空调外机上蹦迪</li>
+            <li>大学校园：喜鹊偷外卖，白头鹎在樱花树上骂街，戴胜摇头晃脑像喝高了</li>
+          </ul>
+        </li>
+        <li>
+          <strong>荒野求生区</strong>
+          <ul class="sub-list">
+            <li>山林：海拔越高，鸟的皮肤越花（红嘴蓝鹊、黑短脚鹎出没）</li>
+            <li>农田：白鹭站牛背演《动物世界》，燕子电线杆上开编队会议</li>
+            <li>水库/河流：翠鸟玩“闪电俯冲”，鸭子组队冰面漂移（冬季限定）</li>
+          </ul>
+        </li>
+        <li>
+          <strong>✨ 冷知识</strong>
+          <ul class="sub-list">
+            <li>垃圾桶附近常有灰喜鹊翻“鸟生盲盒”</li>
+            <li>菜市场屋顶可能有游隼蹲点“外卖”（真有人拍到过！）</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
 
-    <!-- 底部导航栏 -->
-    <tab-bar></tab-bar>
-  </view>
-</template>
+    <!-- 寻鸟时段 -->
+    <section class="section">
+      <h2 class="section-title">⏰ 寻鸟玄学时刻表</h2>
+      <p class="content">
+        <strong>黄金时段：</strong><br />
+        🌅 清晨5-8点：鸟界早高峰，全体开麦唱歌+干饭<br />
+        🌇 傍晚4-6点：社畜下班，鸟儿也赶着回家奶娃<br />
+        <strong>季节限定：</strong><br />
+        🐦 春/秋迁徙季（3-5月、9-11月）：湿地变“国际机场”，抬头可能被鸟屎砸中<br />
+        ❄️ 冬季：鸭子集体表演“冰上芭蕾”，红胁蓝尾鸲穿秋裤（其实是羽毛蓬松啦）
+      </p >
+    </section>
 
-<script setup>
-import { ref, onMounted } from 'vue';
-import TabBar from '@/components/tabbar.vue';
-import homeposter from '../../components/homeposter.vue'
-const searchText = ref('');
-const onSearch = () => {
-  // 实现搜索逻辑
-};
+    <!-- 追踪技巧 -->
+    <section class="section">
+      <h2 class="section-title">🕵️ 追踪术：人人都是鸟界福尔摩斯</h2>
+      <h3 class="sub-title">🎧 听声辨位绝活</h3>
+      <ul class="list">
+        <li>鸟语十级听力题：</li>
+        <ul class="sub-list">
+          <li>单音“嘀——”=远东山雀发微信</li>
+          <li>魔性鬼畜笑 =黑脸噪鹛在嘚瑟</li>
+          <li>电钻音“滋儿哇——”=大杜鹃喊你“布谷！”</li>
+        </ul>
+      </ul>
+    </section>
 
-// 模拟数据
-const posterList = ref([
-  {
-    id: 1,
-    imageUrl: '/static/posts/bird1.jpg',
-    imageHeight: 200,
-    description: '今天在公园拍到的小鸟，真的太可爱了！',
-    views: 1234,
-    likes: 88
-  },
-  {
-    id: 2,
-    imageUrl: '/static/posts/bird2.jpg',
-    imageHeight: 280,
-    description: '清晨6点，记录到了珍贵的候鸟迁徙场景',
-    views: 25678,
-    likes: 1892
-  },
-  // ... 
-]);
+    <!-- 观察技巧 -->
+    <section class="section">
+      <h2 class="section-title">👀 观察篇：你的眼睛就是8K摄像机</h2>
+      <h3 class="sub-title">🎯 锁定目标三步走</h3>
+      <ul class="list">
+        <li>肉眼扫描可疑晃动（想象自己是《黑客帝国》里的尼奥）</li>
+        <li>狙击手式报点：“11点钟方向，第五根树枝分叉处！”</li>
+        <li>望远镜平移追踪，手抖星人建议靠树练习“人形三脚架”</li>
+      </ul>
+    </section>
 
-// 左右列数据
-const leftColumn = ref([]);
-const rightColumn = ref([]);
+    <!-- 禁忌篇 -->
+    <section class="section">
+      <h2 class="section-title">🚫 禁忌篇：做文明的“偷窥狂”</h2>
+      <h3 class="sub-title">❗ 作死行为黑名单</h3>
+      <ul class="list">
+        <li>放抖音神曲引鸟（鸟：这届人类不太正常）</li>
+        <li>投喂面包渣（你喂的是鸟界地沟油）</li>
+        <li>穿高跟鞋闯湿地（别问，问就是拔鞋视频上过热搜）</li>
+        <li>见猛禽就喊“老鹰！”（90%是普通鵟，喊错会被笑三年）</li>
+      </ul>
+    </section>
 
-// 分配数据到两列
-const distributePosters = () => {
-  posterList.value.forEach((poster, index) => {
-    if (index % 2 === 0) {
-      leftColumn.value.push(poster);
-    } else {
-      rightColumn.value.push(poster);
-    }
-  });
-};
+    <!-- 进阶操作 -->
+    <section class="section">
+      <h2 class="section-title">🚀 进阶骚操作</h2>
+      <ul class="list">
+        <li>口技召唤术：嘬唇发“滋滋”声，柳莺会蹦出来吃瓜</li>
+        <li>阳台诱鸟：撒小米可能解锁“珠颈斑鸠全家来干饭”成就</li>
+        <li>制作鸟类meme：给炸毛的棕背伯劳配文“你瞅啥？”，朋友圈点赞收割机！</li>
+      </ul>
+    </section>
 
-onMounted(() => {
-  distributePosters();
-});
-</script>
-
-<style scoped>
-.container {
-  min-height: 100vh;
-  background-color: hsl(86, 41%, 72%);
-  padding-bottom: 50px; /* 为底部tabbar留出空间 */
-}
-.top-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 12px;  /* 增加了内边距，确保元素之间有更好的间距 */
-  background-color: hsl(123, 42%, 28%);  /* 改变顶部导航栏的背景色 */
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  position: sticky;
+    <!-- 终极奥义 -->
+    <section class="section">
+	  <h2 class="section-title">💡 终极奥义</h2>
+	        <p class="content">
+	          观鸟不是集邮！哪怕只看到麻雀扯头花，也要骄傲发朋友圈：“今日收获【树麻雀·骂街限定皮肤】！”<br />
+	          记住——当你开始纠结“那坨屎是不是寿带拉的”，恭喜，你已晋升为高阶“鸟人”！🦜✨
+	        </p >
+	      </section>
+	  
+	      <!-- 暗号指南 -->
+	      <section class="section">
+	        <h2 class="section-title">暗号指南</h2>
+	        <ul class="list">
+	          <li>遇到扛“大炮”的大佬，问“今天有寿带吗？”秒获认可</li>
+	          <li>听到“林鸟”=找树丛，“水鸟”=蹲水边</li>
+	          <li>“加新”不是买手机，是指看到新鸟种！</li>
+	        </ul>
+	      </section>
+	    </div>
+	  </template>
+	  
+	  <script>
+	  export default {
+	    name: "BirdGuide",
+	  };
+	  </script>
+	  
+	  <style scoped>
+	  .bird-guide {
+	    font-family: Arial, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        position: relative;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        overflow: hidden;
+	  }
+	  .petals-container {
+  position: fixed;
   top: 0;
-  z-index: 100;
-  margin-bottom: 8px;  /* 添加底部间距 */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);  /* 添加底部边框 */
-}
-
-.nav-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;  /* 增加了按钮间距 */
-  padding: 4px 4px;
-  border-radius: 5px;
-  background: linear-gradient(145deg, hsl(84, 45%, 68%), #508c38);
-  transition: all 0.3s ease;
-  min-width: 40px;  /* 调整按钮宽度，确保按钮不重叠 */
-  justify-content: center;
-}
-
-.nav-btn:active {
-  box-shadow: inset 2px 2px 5px rgba(46, 44, 44, 0.1),
-              inset -2px -2px 5px rgba(38, 37, 37, 0.8);
-  transform: scale(0.98);
-}
-
-.ranking-btn {
-  border: 1px solid rgba(38, 83, 42, 0.3);
-}
-
-.guide-btn {
-  border: 1px solid rgba(90, 186, 103, 0.3);
-  margin: 0 0.1px 0 20px; 
-  width: 55px;         /* 设置固定宽度 */
-  height: 20px; 
-         /* 设置固定高度 */
-}
-
-.btn-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.nav-btn text {
-  font-size: 14px;
-  color: #333;
-  font-weight: 500;
-}
-
-.search-container {
-  flex: 1;
-  max-width: 250px;  /* 增加最大宽度，给搜索框更多空间 */
-  margin: 0 18px 0 5px;
-}
-
-.search-bar {
-  position: relative;
+  left: 0;
   width: 100%;
-  height: 32px;
-  background: white;
-  border-radius: 5px;
-  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.05),
-              inset -2px -2px 5px rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
 }
-.search-icon {
+
+.petal {
+  position: absolute;
+  background-color: rgba(243, 163, 177, 0.3);
+  border-radius: 150% 0 150% 0;
+  animation: falling 10s infinite linear;
+  width: 15px;
+  height: 15px;
+}
+@keyframes falling {
+  0% {
+    transform: translate(var(--start-x, 0), -10%) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--end-x, 100px), 100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+.petal:nth-child(1) { --start-x: 5vw; --end-x: 25vw; animation-delay: 0s; }
+.petal:nth-child(2) { --start-x: 15vw; --end-x: 35vw; animation-delay: -1s; }
+.petal:nth-child(3) { --start-x: 25vw; --end-x: 45vw; animation-delay: -2s; }
+.petal:nth-child(4) { --start-x: 35vw; --end-x: 55vw; animation-delay: -3s; }
+.petal:nth-child(5) { --start-x: 45vw; --end-x: 65vw; animation-delay: -4s; }
+.petal:nth-child(6) { --start-x: 55vw; --end-x: 75vw; animation-delay: -5s; }
+.petal:nth-child(7) { --start-x: 65vw; --end-x: 85vw; animation-delay: -6s; }
+.petal:nth-child(8) { --start-x: 75vw; --end-x: 95vw; animation-delay: -7s; }
+.petal:nth-child(9) { --start-x: 85vw; --end-x: 105vw; animation-delay: -8s; }
+.petal:nth-child(10) { --start-x: 95vw; --end-x: 115vw; animation-delay: -9s; }
+.petal:nth-child(11) { --start-x: 0vw; --end-x: 20vw; animation-delay: -5.5s; }
+.petal:nth-child(12) { --start-x: 50vw; --end-x: 70vw; animation-delay: -7.5s; }
+.petal:nth-child(13) { --start-x: 10vw; --end-x: 30vw; animation-delay: -2.5s; }
+.petal:nth-child(14) { --start-x: 20vw; --end-x: 40vw; animation-delay: -3.5s; }
+.petal:nth-child(15) { --start-x: 30vw; --end-x: 50vw; animation-delay: -4.5s; }
+.petal:nth-child(16) { --start-x: 40vw; --end-x: 60vw; animation-delay: -5.5s; }
+.petal:nth-child(17) { --start-x: 60vw; --end-x: 80vw; animation-delay: -6.5s; }
+.petal:nth-child(18) { --start-x: 70vw; --end-x: 90vw; animation-delay: -7.5s; }
+.petal:nth-child(19) { --start-x: 80vw; --end-x: 100vw; animation-delay: -8.5s; }
+.petal:nth-child(20) { --start-x: 90vw; --end-x: 110vw; animation-delay: -9.5s; }
+.petal:nth-child(21) { --start-x: 15vw; --end-x: 35vw; animation-delay: -10.5s; }
+.petal:nth-child(22) { --start-x: 25vw; --end-x: 45vw; animation-delay: -11.5s; }
+.petal:nth-child(23) { --start-x: 35vw; --end-x: 55vw; animation-delay: -12.5s; }
+.petal:nth-child(24) { --start-x: 45vw; --end-x: 65vw; animation-delay: -13.5s; }
+
+.title, .section {
+  position: relative;
+  z-index: 2;
+}
+.petal:nth-child(3n) {
+  width: 12px;
+  height: 12px;
+}
+
+.petal:nth-child(3n+1) {
+  width: 15px;
+  height: 15px;
+}
+
+.petal:nth-child(3n+2) {
   width: 18px;
   height: 18px;
-  margin-right: 6px;
-  opacity: 0.6;
+}
+.petal:nth-child(2n) {
+  animation-duration: 12s;
 }
 
-.search-bar input {
-  flex: 1;
-  height: 100%;
-  border: none;
-  background: transparent;
-  font-size: 14px;
-  color: #333;
+.petal:nth-child(3n) {
+  animation-duration: 15s;
 }
 
-.search-placeholder {
-  color: #999;
-  font-size: 14px;
+.petal:nth-child(5n) {
+  animation-duration: 10s;
 }
 
-.content {
-  padding: 12px;
-  background-color: #fcfcfc;  /* 确保内容区域保持原来的背景色 */
+/* 为内容添加半透明背景，提高可读性 */
+.section {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
-.waterfall {
-  display: flex;
-  justify-content: space-between;
-}
-
-.column {
-  width: 48%; /* 留出间距 */
-}
-
-.guide-text {
-  font-weight: 900;
-}
-</style>
+	  
+	  .section-title {
+	    font-size: 1.5rem;
+	    color: #ff7f50;
+	    margin-bottom: 10px;
+	  }
+	  
+	  .sub-title {
+	    font-size: 1.2rem;
+	    color: #1e90ff;
+	    margin-bottom: 8px;
+	  }
+	  
+	  .content {
+	    font-size: 1rem;
+	    color: #333;
+	  }
+	  
+	  .list {
+	    margin-left: 20px;
+	  }
+	  
+	  .sub-list {
+	    margin-left: 20px;
+	    font-size: 0.95rem;
+	    color: #666;
+	  }
+	  
+	  .list li {
+	    margin-bottom: 8px;
+	  }
+	  
+	  strong {
+	    font-weight: bold;
+	    color: #ff6347;
+	  }
+	  
+	  h2, h3 {
+	    margin-top: 20px;
+	    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	  }
+	  
+	  @media (max-width: 600px) {
+	    .title {
+	      font-size: 1.5rem;
+	    }
+	  
+	    .section-title {
+	      font-size: 1.3rem;
+	    }
+	  
+	    .sub-title {
+	      font-size: 1rem;
+	    }
+	  
+	    .content {
+	      font-size: 0.9rem;
+	    }
+	  
+	    .list li {
+	      font-size: 0.9rem;
+	    }
+	  }
+	  </style>
