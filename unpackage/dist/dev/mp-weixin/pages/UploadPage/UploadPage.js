@@ -22,7 +22,7 @@ const _sfc_main = {
       imageUrl.value = "";
     };
     const handleAnalyze = () => {
-      console.log("Analyzing image:", imageUrl.value);
+      common_vendor.index.__f__("log", "at pages/UploadPage/UploadPage.vue:63", "Analyzing image:", imageUrl.value);
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
@@ -41,3 +41,4 @@ const _sfc_main = {
   }
 };
 wx.createPage(_sfc_main);
+//# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/UploadPage/UploadPage.js.map

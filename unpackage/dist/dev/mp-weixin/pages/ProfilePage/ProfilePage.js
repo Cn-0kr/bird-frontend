@@ -1,8 +1,10 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const api_services_user = require("../../api/services/user.js");
 const common_assets = require("../../common/assets.js");
 const TabBar = () => "../../components/tabbar.js";
 const HomePoster = () => "../../components/homeposter.js";
+const userService = new api_services_user.UserService();
 const _sfc_main = {
   components: {
     HomePoster,
@@ -15,10 +17,11 @@ const _sfc_main = {
       userInfo: {
         avatar: "/static/default-avatar.png",
         nickname: "鸟类爱好者",
-        bio: "热爱自然，记录生活中的每一只小鸟",
-        postsCount: 42,
-        likesCount: 128,
-        level: 3
+        bio: "",
+        // 添加默认提示
+        postsCount: 0,
+        likesCount: 0,
+        level: 1
       },
       achievements: [
         {
@@ -31,23 +34,45 @@ const _sfc_main = {
           name: "摄影新手",
           icon: "/static/icons/achievements/photographer.png"
         }
-        // 更多成就...
       ],
       posts: [],
       likes: [],
+      records: [],
       leftColumn: [],
       rightColumn: []
     };
   },
   computed: {
     currentContent() {
-      return this.activeTab === "posts" ? this.posts : this.likes;
+      switch (this.activeTab) {
+        case "posts":
+          return this.posts;
+        case "likes":
+          return this.likes;
+        case "records":
+          return this.records;
+        default:
+          return [];
+      }
     }
   },
-  onLoad() {
+  async onLoad() {
+    await this.loadUserInfo();
     this.loadContent();
   },
   methods: {
+    async loadUserInfo() {
+      try {
+        const intro = await userService.getIntro();
+        this.userInfo.bio = intro || "点击添加个人介绍...";
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/ProfilePage/ProfilePage.vue:189", "Failed to load user info:", error);
+        common_vendor.index.showToast({
+          title: "加载个人信息失败",
+          icon: "none"
+        });
+      }
+    },
     handleAvatarClick() {
       common_vendor.index.chooseImage({
         count: 1,
@@ -68,10 +93,25 @@ const _sfc_main = {
         content: this.userInfo.bio,
         success: (res) => {
           if (res.confirm) {
-            this.userInfo.bio = res.content;
+            this.updateBio(res.content);
           }
         }
       });
+    },
+    async updateBio(newBio) {
+      try {
+        this.userInfo.bio = newBio;
+        common_vendor.index.showToast({
+          title: "更新成功",
+          icon: "success"
+        });
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/ProfilePage/ProfilePage.vue:235", "Failed to update bio:", error);
+        common_vendor.index.showToast({
+          title: "更新失败",
+          icon: "none"
+        });
+      }
     },
     switchTab(tab) {
       if (this.activeTab !== tab) {
@@ -83,37 +123,61 @@ const _sfc_main = {
       this.isLoading = true;
       try {
         setTimeout(() => {
-          const data = this.activeTab === "posts" ? [
-            {
-              id: 1,
-              imageUrl: "/static/posts/bird1.jpg",
-              imageHeight: 200,
-              description: "今天拍到的小鸟",
-              views: 1234,
-              likes: 88
-            }
-            // 更多数据...
-          ] : [
-            {
-              id: 2,
-              imageUrl: "/static/posts/bird2.jpg",
-              imageHeight: 280,
-              description: "好漂亮的鸟儿！",
-              views: 2567,
-              likes: 189
-            }
-            // 更多数据...
-          ];
-          if (this.activeTab === "posts") {
-            this.posts = data;
-          } else {
-            this.likes = data;
+          let data;
+          switch (this.activeTab) {
+            case "posts":
+              data = [
+                {
+                  id: 1,
+                  imageUrl: "/static/posts/bird1.jpg",
+                  imageHeight: 200,
+                  description: "今天拍到的小鸟",
+                  views: 1234,
+                  likes: 88
+                }
+              ];
+              this.posts = data;
+              break;
+            case "likes":
+              data = [
+                {
+                  id: 2,
+                  imageUrl: "/static/posts/bird2.jpg",
+                  imageHeight: 280,
+                  description: "好漂亮的鸟儿！",
+                  views: 2567,
+                  likes: 189
+                }
+              ];
+              this.likes = data;
+              break;
+            case "records":
+              data = [
+                {
+                  id: 3,
+                  imageUrl: "/static/recognition/bird1.jpg",
+                  imageHeight: 240,
+                  description: "识别结果：红头长尾山雀",
+                  accuracy: "98%",
+                  date: "2024-03-20"
+                },
+                {
+                  id: 5,
+                  imageUrl: "/static/recognition/bird2.jpg",
+                  imageHeight: 220,
+                  description: "识别结果：白头硬尾鹎",
+                  accuracy: "97%",
+                  date: "2024-03-18"
+                }
+              ];
+              this.records = data;
+              break;
           }
           this.distributeContent();
           this.isLoading = false;
         }, 500);
       } catch (error) {
-        console.error("Load content error:", error);
+        common_vendor.index.__f__("error", "at pages/ProfilePage/ProfilePage.vue:310", "Load content error:", error);
         this.isLoading = false;
         common_vendor.index.showToast({
           title: "加载失败",
@@ -162,11 +226,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     m: common_vendor.o(($event) => $options.switchTab("posts")),
     n: $data.activeTab === "likes" ? 1 : "",
     o: common_vendor.o(($event) => $options.switchTab("likes")),
-    p: $data.isLoading
+    p: $data.activeTab === "records" ? 1 : "",
+    q: common_vendor.o(($event) => $options.switchTab("records")),
+    r: $data.isLoading
   }, $data.isLoading ? {} : $options.currentContent.length === 0 ? {
-    r: common_vendor.t($data.activeTab === "posts" ? "还没有发布过内容~" : "还没有点赞过内容~")
+    t: common_vendor.t($data.activeTab === "posts" ? "还没有发布过内容~" : $data.activeTab === "likes" ? "还没有点赞过内容~" : "还没有识别过哦~")
   } : {
-    s: common_vendor.f($data.leftColumn, (poster, k0, i0) => {
+    v: common_vendor.f($data.leftColumn, (poster, k0, i0) => {
       return {
         a: poster.id,
         b: "7b4c7c70-0-" + i0,
@@ -175,7 +241,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         })
       };
     }),
-    t: common_vendor.f($data.rightColumn, (poster, k0, i0) => {
+    w: common_vendor.f($data.rightColumn, (poster, k0, i0) => {
       return {
         a: poster.id,
         b: "7b4c7c70-1-" + i0,
@@ -185,8 +251,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       };
     })
   }, {
-    q: $options.currentContent.length === 0
+    s: $options.currentContent.length === 0
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-7b4c7c70"]]);
 wx.createPage(MiniProgramPage);
+//# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/ProfilePage/ProfilePage.js.map

@@ -75,7 +75,7 @@
         class="tab-item"
         :class="{ active: activeTab === 'records' }"
         @click="switchTab('records')"
->
+      >
         识别记录
       </view>
     </view>
@@ -108,19 +108,22 @@
       </view>
     </view>
 	
-	<!-- 添加底部导航栏 -->
-	<tab-bar></tab-bar>
+    <!-- 添加底部导航栏 -->
+    <tab-bar></tab-bar>
   </view>
 </template>
 
 <script>
 import TabBar from '@/components/tabbar.vue';
-import HomePoster from '../../components/homeposter.vue'
+import HomePoster from '../../components/homeposter.vue';
+import { UserService } from '@/api/services/user';
+
+const userService = new UserService();
 
 export default {
   components: {
     HomePoster,
-	TabBar
+    TabBar
   },
 
   data() {
@@ -130,28 +133,26 @@ export default {
       userInfo: {
         avatar: '/static/default-avatar.png',
         nickname: '鸟类爱好者',
-        bio: '热爱自然，记录生活中的每一只小鸟',
-        postsCount: 42,
-        likesCount: 128,
-        level: 3
+        bio: '',  // 添加默认提示
+        postsCount: 0,
+        likesCount: 0, 
+        level: 1
       },
       achievements: [
         {
           id: 1,
           name: '初级观鸟员',
-          icon: '/static/icons/achievements/beginner.png',
-          styleClass: 'blue-purple-gradient'
+          icon: '/static/icons/achievements/beginner.png'
         },
         {
-          id: 2,
+          id: 2, 
           name: '摄影新手',
-          icon: '/static/icons/achievements/photographer.png',
-          styleClass: 'red-yellow-gradient'
-        },
-        // 更多成就...
+          icon: '/static/icons/achievements/photographer.png'
+        }
       ],
       posts: [],
       likes: [],
+      records: [],
       leftColumn: [],
       rightColumn: []
     }
@@ -172,16 +173,31 @@ export default {
     }
   },
 
-  onLoad() {
+  async onLoad() {
+    await this.loadUserInfo();
     this.loadContent();
   },
 
   methods: {
+	async loadUserInfo() {
+	  try {
+		// 获取个人介绍
+		const intro = await userService.getIntro();
+		// console.log(intro);
+		this.userInfo.bio = intro || '点击添加个人介绍...';
+	  } catch (error) {
+		console.error('Failed to load user info:', error);
+		uni.showToast({
+		  title: '加载个人信息失败',
+		  icon: 'none'
+		});
+	  }
+	},
+
     handleAvatarClick() {
       uni.chooseImage({
         count: 1,
         success: (res) => {
-          // 处理头像上传逻辑
           this.userInfo.avatar = res.tempFilePaths[0];
         }
       });
@@ -200,10 +216,28 @@ export default {
         content: this.userInfo.bio,
         success: (res) => {
           if (res.confirm) {
-            this.userInfo.bio = res.content;
+            this.updateBio(res.content);
           }
         }
       });
+    },
+
+    async updateBio(newBio) {
+      try {
+        // 这里可以添加更新个人介绍的API调用
+        // await userService.updateIntro(newBio);
+        this.userInfo.bio = newBio;
+        uni.showToast({
+          title: '更新成功',
+          icon: 'success'
+        });
+      } catch (error) {
+        console.error('Failed to update bio:', error);
+        uni.showToast({
+          title: '更新失败',
+          icon: 'none'
+        });
+      }
     },
 
     switchTab(tab) {
@@ -216,7 +250,6 @@ export default {
     async loadContent() {
       this.isLoading = true;
       try {
-        // 模拟加载数据
         setTimeout(() => {
           let data;
           
@@ -230,12 +263,11 @@ export default {
                   description: '今天拍到的小鸟',
                   views: 1234,
                   likes: 88
-                },
-                // 更多数据...
+                }
               ];
               this.posts = data;
               break;
-              case 'likes':
+            case 'likes':
               data = [
                 {
                   id: 2,
@@ -244,12 +276,11 @@ export default {
                   description: '好漂亮的鸟儿！',
                   views: 2567,
                   likes: 189
-                },
-                // 更多数据...
+                }
               ];
               this.likes = data;
               break;
-              case 'records':
+            case 'records':
               data = [
                 {
                   id: 3,
@@ -259,7 +290,6 @@ export default {
                   accuracy: '98%',
                   date: '2024-03-20'
                 },
-                
                 {
                   id: 5,
                   imageUrl: '/static/recognition/bird2.jpg',
@@ -267,24 +297,7 @@ export default {
                   description: '识别结果：白头硬尾鹎',
                   accuracy: '97%',
                   date: '2024-03-18'
-                },
-                {
-                  id: 6,
-                  imageUrl: '/static/recognition/bird3.jpg',
-                  imageHeight: 280,
-                  description: '识别结果：棕背伯劳',
-                  accuracy: '93%',
-                  date: '2024-03-17'
-                },
-                {
-                  id: 7,
-                  imageUrl: '/static/recognition/bird4.jpg',
-                  imageHeight: 250,
-                  description: '识别结果：普通翠鸟',
-                  accuracy: '96%',
-                  date: '2024-03-15'
                 }
-                // 更多识别记录...
               ];
               this.records = data;
               break;
@@ -293,7 +306,6 @@ export default {
           this.distributeContent();
           this.isLoading = false;
         }, 500);
-              
       } catch (error) {
         console.error('Load content error:', error);
         this.isLoading = false;
@@ -492,7 +504,7 @@ export default {
   font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 13px;
   font-weight: 600;
-  background: linear-gradient(45deg, #4A90E2, #9B59B6);  /* 蓝紫渐变 */
+  background: linear-gradient(45deg, #4A90E2, #9B59B6);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -504,13 +516,11 @@ export default {
   font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 13px;
   font-weight: 600;
-  background: linear-gradient(45deg, #E74C3C, #F1C40F);  /* 红黄渐变 */
+  background: linear-gradient(45deg, #E74C3C, #F1C40F);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   letter-spacing: 1px;
 }
-
 </style>
-

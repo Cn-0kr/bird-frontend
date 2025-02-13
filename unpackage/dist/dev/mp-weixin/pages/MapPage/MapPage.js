@@ -29,7 +29,7 @@ const _sfc_main = {
           });
         },
         fail: (err) => {
-          console.error("定位失败：", err);
+          common_vendor.index.__f__("error", "at pages/MapPage/MapPage.vue:70", "定位失败：", err);
           common_vendor.index.showModal({
             title: "提示",
             content: "需要获取您的地理位置才能使用此功能",
@@ -71,3 +71,4 @@ const _sfc_main = {
   }
 };
 wx.createPage(_sfc_main);
+//# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/MapPage/MapPage.js.map

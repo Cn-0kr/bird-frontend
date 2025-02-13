@@ -1,6 +1,7 @@
 "use strict";
 const _imports_0$2 = "/static/icons/ranking.png";
-const _imports_1$1 = "/static/icons/guide.png";
+const _imports_1$1 = "/static/icons/search.png";
+const _imports_2 = "/static/icons/guide.png";
 const _imports_0$1 = "/static/icons/edit.png";
 const storkImg = "/assets/stork.6a8e88ae.jpg";
 const ibisImg = "/assets/ibis.869cec95.jpg";
@@ -19,6 +20,7 @@ exports._imports_0$1 = _imports_0$1;
 exports._imports_0$2 = _imports_0;
 exports._imports_1 = _imports_1$1;
 exports._imports_1$1 = _imports_1;
+exports._imports_2 = _imports_2;
 exports.canaryImg = canaryImg;
 exports.craneImg = craneImg;
 exports.ibisImg = ibisImg;
@@ -29,3 +31,4 @@ exports.parrotImg = parrotImg;
 exports.storkImg = storkImg;
 exports.swallowImg = swallowImg;
 exports.woodpeckerImg = woodpeckerImg;
+//# sourceMappingURL=../../.sourcemap/mp-weixin/common/assets.js.map
