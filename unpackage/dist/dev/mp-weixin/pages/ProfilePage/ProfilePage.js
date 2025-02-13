@@ -208,7 +208,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: $data.userInfo.avatar || "/static/default-avatar.png",
     b: common_vendor.o((...args) => $options.handleAvatarClick && $options.handleAvatarClick(...args)),
     c: common_vendor.t($data.userInfo.nickname),
-    d: common_assets._imports_0$1,
+    d: common_assets._imports_0$2,
     e: common_vendor.o((...args) => $options.handleEditProfile && $options.handleEditProfile(...args)),
     f: common_vendor.t($data.userInfo.bio || "点击添加个人介绍..."),
     g: common_vendor.o((...args) => $options.handleEditBio && $options.handleEditBio(...args)),
