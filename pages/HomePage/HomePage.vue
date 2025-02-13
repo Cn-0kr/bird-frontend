@@ -105,7 +105,7 @@ onMounted(() => {
 <style scoped>
 .container {
   min-height: 100vh;
-  background-color: hsl(86, 41%, 72%);
+  background-color: #e6fae9;
   padding-bottom: 50px; /* 为底部tabbar留出空间 */
 }
 .top-nav {
