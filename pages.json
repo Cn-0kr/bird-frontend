@@ -98,5 +98,15 @@
 	      "^homeposter": "@/components/homeposter.vue"
 	    }
 	},
-	"uniIdRouter": {}
+	"uniIdRouter": {},
+	
+	// 添加位置权限配置
+	"permission": {
+		"scope.userLocation": {
+			"desc": "你的位置信息将用于地图定位和查找附近的鸟类观测点"
+		}
+	},
+	"requiredPrivateInfos": [
+		"getLocation"
+	]
 }
