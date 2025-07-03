@@ -359,11 +359,6 @@ const _sfc_main = {
         w: showInfoCard.value
       }, showInfoCard.value ? {
         x: common_vendor.o(($event) => showInfoCard.value = false)
-      } : {}, {
-        y: showInfoCard.value
-      }, showInfoCard.value ? {
-        z: common_vendor.t(selectedLocation.value.id),
-        A: common_vendor.o((...args) => _ctx.closeInfoCard && _ctx.closeInfoCard(...args))
       } : {});
     };
   }

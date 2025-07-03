@@ -47,9 +47,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: $props.posterData.imageUrl,
     b: $props.posterData.imageHeight + "px",
     c: common_vendor.t($props.posterData.description),
-    d: common_assets._imports_0$3,
+    d: common_assets._imports_0$7,
     e: common_vendor.t($options.formatNumber($props.posterData.views)),
-    f: common_assets._imports_1$2,
+    f: common_assets._imports_1$5,
     g: common_vendor.t($options.formatNumber($props.posterData.likes)),
     h: common_vendor.o((...args) => $options.navigateToDetail && $options.navigateToDetail(...args))
   };

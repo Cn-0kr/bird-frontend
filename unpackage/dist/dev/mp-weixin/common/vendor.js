@@ -68,8 +68,8 @@ const capitalize = cacheStringFunction((str) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 });
 const toHandlerKey = cacheStringFunction((str) => {
-  const s = str ? `on${capitalize(str)}` : ``;
-  return s;
+  const s2 = str ? `on${capitalize(str)}` : ``;
+  return s2;
 });
 const hasChanged = (value, oldValue) => !Object.is(value, oldValue);
 const invokeArrayFns$1 = (fns, arg) => {
@@ -85,9 +85,59 @@ const def = (obj, key, value) => {
   });
 };
 const looseToNumber = (val) => {
-  const n = parseFloat(val);
-  return isNaN(n) ? val : n;
+  const n2 = parseFloat(val);
+  return isNaN(n2) ? val : n2;
 };
+function normalizeStyle(value) {
+  if (isArray(value)) {
+    const res = {};
+    for (let i = 0; i < value.length; i++) {
+      const item = value[i];
+      const normalized = isString(item) ? parseStringStyle(item) : normalizeStyle(item);
+      if (normalized) {
+        for (const key in normalized) {
+          res[key] = normalized[key];
+        }
+      }
+    }
+    return res;
+  } else if (isString(value) || isObject(value)) {
+    return value;
+  }
+}
+const listDelimiterRE = /;(?![^(]*\))/g;
+const propertyDelimiterRE = /:([^]+)/;
+const styleCommentRE = /\/\*[^]*?\*\//g;
+function parseStringStyle(cssText) {
+  const ret = {};
+  cssText.replace(styleCommentRE, "").split(listDelimiterRE).forEach((item) => {
+    if (item) {
+      const tmp = item.split(propertyDelimiterRE);
+      tmp.length > 1 && (ret[tmp[0].trim()] = tmp[1].trim());
+    }
+  });
+  return ret;
+}
+function normalizeClass(value) {
+  let res = "";
+  if (isString(value)) {
+    res = value;
+  } else if (isArray(value)) {
+    for (let i = 0; i < value.length; i++) {
+      const normalized = normalizeClass(value[i]);
+      if (normalized) {
+        res += normalized + " ";
+      }
+    }
+  } else if (isObject(value)) {
+    for (const name in value) {
+      if (value[name]) {
+        res += name + " ";
+      }
+    }
+  }
+  return res.trim();
+}
 const toDisplayString = (val) => {
   return isString(val) ? val : val == null ? "" : isArray(val) || isObject(val) && (val.toString === objectToString || !isFunction(val.toString)) ? JSON.stringify(val, replacer, 2) : String(val);
 };
@@ -5017,6 +5067,22 @@ function getCreateApp() {
     return my[method];
   }
 }
+function stringifyStyle(value) {
+  if (isString(value)) {
+    return value;
+  }
+  return stringify(normalizeStyle(value));
+}
+function stringify(styles) {
+  let ret = "";
+  if (!styles || isString(styles)) {
+    return ret;
+  }
+  for (const key in styles) {
+    ret += `${key.startsWith(`--`) ? key : hyphenate(key)}:${styles[key]};`;
+  }
+  return ret;
+}
 function vOn(value, key) {
   const instance = getCurrentInstance();
   const ctx = instance.ctx;
@@ -5145,7 +5211,9 @@ function vFor(source, renderItem) {
 }
 const o = (value, key) => vOn(value, key);
 const f = (source, renderItem) => vFor(source, renderItem);
+const s = (value) => stringifyStyle(value);
 const e = (target, ...sources) => extend(target, ...sources);
+const n = (value) => normalizeClass(value);
 const t = (val) => toDisplayString(val);
 const p = (props) => renderProps(props);
 function createApp$1(rootComponent, rootProps = null) {
@@ -5154,9 +5222,10 @@ function createApp$1(rootComponent, rootProps = null) {
 }
 const createSSRApp = createApp$1;
 function getLocaleLanguage$1() {
+  var _a;
   let localeLanguage = "";
   {
-    const appBaseInfo = wx.getAppBaseInfo();
+    const appBaseInfo = ((_a = wx.getAppBaseInfo) === null || _a === void 0 ? void 0 : _a.call(wx)) || wx.getSystemInfoSync();
     const language = appBaseInfo && appBaseInfo.language ? appBaseInfo.language : LOCALE_EN;
     localeLanguage = normalizeLocale(language) || LOCALE_EN;
   }
@@ -5567,9 +5636,15 @@ let isIOS = false;
 let deviceWidth = 0;
 let deviceDPR = 0;
 function checkDeviceWidth() {
-  const { windowWidth, pixelRatio, platform } = Object.assign({}, wx.getWindowInfo(), {
-    platform: wx.getDeviceInfo().platform
-  });
+  var _a, _b;
+  let windowWidth, pixelRatio, platform;
+  {
+    const windowInfo = ((_a = wx.getWindowInfo) === null || _a === void 0 ? void 0 : _a.call(wx)) || wx.getSystemInfoSync();
+    const deviceInfo = ((_b = wx.getDeviceInfo) === null || _b === void 0 ? void 0 : _b.call(wx)) || wx.getSystemInfoSync();
+    windowWidth = windowInfo.windowWidth;
+    pixelRatio = windowInfo.pixelRatio;
+    platform = deviceInfo.platform;
+  }
   deviceWidth = windowWidth;
   deviceDPR = pixelRatio;
   isIOS = platform === "ios";
@@ -5731,8 +5806,8 @@ const $once = defineSyncApi(API_ONCE, (name, callback) => {
 const $off = defineSyncApi(API_OFF, (name, callback) => {
   if (!isArray(name))
     name = name ? [name] : [];
-  name.forEach((n) => {
-    eventBus.off(n, callback);
+  name.forEach((n2) => {
+    eventBus.off(n2, callback);
   });
 }, OffProtocol);
 const $emit = defineSyncApi(API_EMIT, (name, ...args) => {
@@ -6024,11 +6099,29 @@ function getOSInfo(system, platform) {
     osName = platform;
     osVersion = system;
   } else {
-    osName = system.split(" ")[0] || "";
+    osName = system.split(" ")[0] || platform;
     osVersion = system.split(" ")[1] || "";
   }
+  osName = osName.toLocaleLowerCase();
+  switch (osName) {
+    case "harmony":
+    case "ohos":
+    case "openharmony":
+      osName = "harmonyos";
+      break;
+    case "iphone os":
+      osName = "ios";
+      break;
+    case "mac":
+    case "darwin":
+      osName = "macos";
+      break;
+    case "windows_nt":
+      osName = "windows";
+      break;
+  }
   return {
-    osName: osName.toLocaleLowerCase(),
+    osName,
     osVersion
   };
 }
@@ -6049,9 +6142,9 @@ function populateParameters(fromRes, toRes) {
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "4.56",
-    uniCompilerVersion: "4.56",
-    uniRuntimeVersion: "4.56",
+    uniCompileVersion: "4.66",
+    uniCompilerVersion: "4.66",
+    uniRuntimeVersion: "4.66",
     uniPlatform: "mp-weixin",
     deviceBrand,
     deviceModel: model,
@@ -6200,9 +6293,9 @@ const getAppBaseInfo = {
       appLanguage: getAppLanguage(hostLanguage),
       isUniAppX: false,
       uniPlatform: "mp-weixin",
-      uniCompileVersion: "4.56",
-      uniCompilerVersion: "4.56",
-      uniRuntimeVersion: "4.56"
+      uniCompileVersion: "4.66",
+      uniCompilerVersion: "4.66",
+      uniRuntimeVersion: "4.66"
     };
     extend(toRes, parameters);
   }
@@ -6483,6 +6576,91 @@ function tryConnectSocket(host2, port, id) {
     });
   });
 }
+const CONSOLE_TYPES = ["log", "warn", "error", "info", "debug"];
+const originalConsole = /* @__PURE__ */ CONSOLE_TYPES.reduce((methods, type) => {
+  methods[type] = console[type].bind(console);
+  return methods;
+}, {});
+let sendError = null;
+const errorQueue = /* @__PURE__ */ new Set();
+const errorExtra = {};
+function sendErrorMessages(errors) {
+  if (sendError == null) {
+    errors.forEach((error) => {
+      errorQueue.add(error);
+    });
+    return;
+  }
+  const data = errors.map((err) => {
+    if (typeof err === "string") {
+      return err;
+    }
+    const isPromiseRejection = err && "promise" in err && "reason" in err;
+    const prefix = isPromiseRejection ? "UnhandledPromiseRejection: " : "";
+    if (isPromiseRejection) {
+      err = err.reason;
+    }
+    if (err instanceof Error && err.stack) {
+      if (err.message && !err.stack.includes(err.message)) {
+        return `${prefix}${err.message}
+${err.stack}`;
+      }
+      return `${prefix}${err.stack}`;
+    }
+    if (typeof err === "object" && err !== null) {
+      try {
+        return prefix + JSON.stringify(err);
+      } catch (err2) {
+        return prefix + String(err2);
+      }
+    }
+    return prefix + String(err);
+  }).filter(Boolean);
+  if (data.length > 0) {
+    sendError(JSON.stringify(Object.assign({
+      type: "error",
+      data
+    }, errorExtra)));
+  }
+}
+function setSendError(value, extra = {}) {
+  sendError = value;
+  Object.assign(errorExtra, extra);
+  if (value != null && errorQueue.size > 0) {
+    const errors = Array.from(errorQueue);
+    errorQueue.clear();
+    sendErrorMessages(errors);
+  }
+}
+function initOnError() {
+  function onError2(error) {
+    try {
+      if (typeof PromiseRejectionEvent !== "undefined" && error instanceof PromiseRejectionEvent && error.reason instanceof Error && error.reason.message && error.reason.message.includes(`Cannot create property 'errMsg' on string 'taskId`)) {
+        return;
+      }
+      if (true) {
+        originalConsole.error(error);
+      }
+      sendErrorMessages([error]);
+    } catch (err) {
+      originalConsole.error(err);
+    }
+  }
+  if (typeof index.onError === "function") {
+    index.onError(onError2);
+  }
+  if (typeof index.onUnhandledRejection === "function") {
+    index.onUnhandledRejection(onError2);
+  }
+  return function offError2() {
+    if (typeof index.offError === "function") {
+      index.offError(onError2);
+    }
+    if (typeof index.offUnhandledRejection === "function") {
+      index.offUnhandledRejection(onError2);
+    }
+  };
+}
 function formatMessage(type, args) {
   try {
     return {
@@ -6515,7 +6693,16 @@ function formatArg(arg, depth = 0) {
     case "boolean":
       return formatBoolean(arg);
     case "object":
-      return formatObject(arg, depth);
+      try {
+        return formatObject(arg, depth);
+      } catch (e2) {
+        return {
+          type: "object",
+          value: {
+            properties: []
+          }
+        };
+      }
     case "undefined":
       return formatUndefined();
     case "function":
@@ -6661,13 +6848,20 @@ function formatObject(value, depth) {
       }
     }
   }
+  let entries = Object.entries(value);
+  if (isHarmonyBuilderParams(value)) {
+    entries = entries.filter(([key]) => key !== "modifier" && key !== "nodeContent");
+  }
   return {
     type: "object",
     className,
     value: {
-      properties: Object.entries(value).map((entry) => formatObjectProperty(entry[0], entry[1], depth + 1))
+      properties: entries.map((entry) => formatObjectProperty(entry[0], entry[1], depth + 1))
     }
   };
+}
+function isHarmonyBuilderParams(value) {
+  return value.modifier && value.modifier._attribute && value.nodeContent;
 }
 function isComponentPublicInstance(value) {
   return value.$ && isComponentInternalInstance(value.$);
@@ -6746,10 +6940,11 @@ function formatMapEntry(value, depth) {
     value: formatArg(value[1], depth)
   };
 }
-const CONSOLE_TYPES = ["log", "warn", "error", "info", "debug"];
 let sendConsole = null;
 const messageQueue = [];
 const messageExtra = {};
+const EXCEPTION_BEGIN_MARK = "---BEGIN:EXCEPTION---";
+const EXCEPTION_END_MARK = "---END:EXCEPTION---";
 function sendConsoleMessages(messages) {
   if (sendConsole == null) {
     messageQueue.push(...messages);
@@ -6769,10 +6964,6 @@ function setSendConsole(value, extra = {}) {
     sendConsoleMessages(messages);
   }
 }
-const originalConsole = /* @__PURE__ */ CONSOLE_TYPES.reduce((methods, type) => {
-  methods[type] = console[type].bind(console);
-  return methods;
-}, {});
 const atFileRegex = /^\s*at\s+[\w/./-]+:\d+$/;
 function rewriteConsole() {
   function wrapConsole(type) {
@@ -6786,6 +6977,18 @@ function rewriteConsole() {
       }
       {
         originalConsole[type](...originalArgs);
+      }
+      if (type === "error" && args.length === 1) {
+        const arg = args[0];
+        if (typeof arg === "string" && arg.startsWith(EXCEPTION_BEGIN_MARK)) {
+          const startIndex = EXCEPTION_BEGIN_MARK.length;
+          const endIndex = arg.length - EXCEPTION_END_MARK.length;
+          sendErrorMessages([arg.slice(startIndex, endIndex)]);
+          return;
+        } else if (arg instanceof Error) {
+          sendErrorMessages([arg]);
+          return;
+        }
       }
       sendConsoleMessages([formatMessage(type, args)]);
     };
@@ -6831,87 +7034,10 @@ function isConsoleWritable() {
   console.log = value;
   return isWritable;
 }
-let sendError = null;
-const errorQueue = /* @__PURE__ */ new Set();
-const errorExtra = {};
-function sendErrorMessages(errors) {
-  if (sendError == null) {
-    errors.forEach((error) => {
-      errorQueue.add(error);
-    });
-    return;
-  }
-  const data = errors.map((err) => {
-    const isPromiseRejection = err && "promise" in err && "reason" in err;
-    const prefix = isPromiseRejection ? "UnhandledPromiseRejection: " : "";
-    if (isPromiseRejection) {
-      err = err.reason;
-    }
-    if (err instanceof Error && err.stack) {
-      if (err.message && !err.stack.includes(err.message)) {
-        return `${prefix}${err.message}
-${err.stack}`;
-      }
-      return `${prefix}${err.stack}`;
-    }
-    if (typeof err === "object" && err !== null) {
-      try {
-        return prefix + JSON.stringify(err);
-      } catch (err2) {
-        return prefix + String(err2);
-      }
-    }
-    return prefix + String(err);
-  }).filter(Boolean);
-  if (data.length > 0) {
-    sendError(JSON.stringify(Object.assign({
-      type: "error",
-      data
-    }, errorExtra)));
-  }
-}
-function setSendError(value, extra = {}) {
-  sendError = value;
-  Object.assign(errorExtra, extra);
-  if (value != null && errorQueue.size > 0) {
-    const errors = Array.from(errorQueue);
-    errorQueue.clear();
-    sendErrorMessages(errors);
-  }
-}
-function initOnError() {
-  function onError2(error) {
-    try {
-      if (typeof PromiseRejectionEvent !== "undefined" && error instanceof PromiseRejectionEvent && error.reason instanceof Error && error.reason.message && error.reason.message.includes(`Cannot create property 'errMsg' on string 'taskId`)) {
-        return;
-      }
-      if (true) {
-        originalConsole.error(error);
-      }
-      sendErrorMessages([error]);
-    } catch (err) {
-      originalConsole.error(err);
-    }
-  }
-  if (typeof index.onError === "function") {
-    index.onError(onError2);
-  }
-  if (typeof index.onUnhandledRejection === "function") {
-    index.onUnhandledRejection(onError2);
-  }
-  return function offError2() {
-    if (typeof index.offError === "function") {
-      index.offError(onError2);
-    }
-    if (typeof index.offUnhandledRejection === "function") {
-      index.offUnhandledRejection(onError2);
-    }
-  };
-}
 function initRuntimeSocketService() {
-  const hosts = "192.168.198.1,192.168.98.1,100.80.77.84,127.0.0.1";
+  const hosts = "192.168.10.25,192.168.198.1,192.168.98.1,127.0.0.1,172.27.208.1";
   const port = "8090";
-  const id = "mp-weixin_FF-jrV";
+  const id = "mp-weixin_JrIBVN";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -6927,13 +7053,19 @@ function initRuntimeSocketService() {
         restoreError();
         restoreConsole();
         originalConsole.error(wrapError("开发模式下日志通道建立 socket 连接失败。"));
-        originalConsole.error(wrapError("如果是小程序平台，请勾选不校验合法域名配置。"));
+        {
+          originalConsole.error(wrapError("小程序平台，请勾选不校验合法域名配置。"));
+        }
         originalConsole.error(wrapError("如果是运行到真机，请确认手机与电脑处于同一网络。"));
         return false;
       }
-      initMiniProgramGlobalFlag();
+      {
+        initMiniProgramGlobalFlag();
+      }
       socket.onClose(() => {
-        originalConsole.error(wrapError("开发模式下日志通道 socket 连接关闭，请在 HBuilderX 中重新运行。"));
+        {
+          originalConsole.error(wrapError("开发模式下日志通道 socket 连接关闭，请在 HBuilderX 中重新运行。"));
+        }
         restoreError();
         restoreConsole();
       });
@@ -7074,9 +7206,10 @@ function findVmByVueId(instance, vuePid) {
   }
 }
 function getLocaleLanguage() {
+  var _a;
   let localeLanguage = "";
   {
-    const appBaseInfo = wx.getAppBaseInfo();
+    const appBaseInfo = ((_a = wx.getAppBaseInfo) === null || _a === void 0 ? void 0 : _a.call(wx)) || wx.getSystemInfoSync();
     const language = appBaseInfo && appBaseInfo.language ? appBaseInfo.language : LOCALE_EN;
     localeLanguage = normalizeLocale(language) || LOCALE_EN;
   }
@@ -7851,14 +7984,19 @@ const createSubpackageApp = initCreateSubpackageApp();
   wx.createSubpackageApp = global.createSubpackageApp = createSubpackageApp;
 }
 exports._export_sfc = _export_sfc;
+exports.computed = computed;
 exports.createSSRApp = createSSRApp;
 exports.e = e;
 exports.f = f;
 exports.index = index;
+exports.n = n;
+exports.nextTick$1 = nextTick$1;
 exports.o = o;
 exports.onMounted = onMounted;
 exports.p = p;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
+exports.s = s;
 exports.t = t;
+exports.watch = watch;
 //# sourceMappingURL=../../.sourcemap/mp-weixin/common/vendor.js.map

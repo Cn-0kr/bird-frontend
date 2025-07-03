@@ -62,6 +62,20 @@
 			{
 				"navigationBarTitleText" : ""
 			}
+		},
+		{
+			"path" : "pages/AIChat/AIChat",
+			"style" : 
+			{
+				"navigationBarTitleText" : "AI助理"
+			}
+		},
+		{
+			"path" : "pages/BirdEncyclopedia/BirdEncyclopedia",
+			"style" : 
+			{
+				"navigationBarTitleText" : "图鉴"
+			}
 		}
 	],
 	"tabBar": {

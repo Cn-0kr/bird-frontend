@@ -34,17 +34,17 @@ const _sfc_main = {
         c: common_assets._imports_0$1,
         d: common_assets._imports_1$1,
         e: common_assets._imports_2$1,
-        f: common_assets._imports_3,
+        f: common_assets._imports_3$1,
         g: imageUrl.value
       }, imageUrl.value ? {
         h: common_vendor.o(handleReset),
         i: common_vendor.o(handleAnalyze)
       } : {
-        j: common_assets._imports_4,
+        j: common_assets._imports_4$1,
         k: common_vendor.o(handleUpload),
-        l: common_assets._imports_5,
+        l: common_assets._imports_5$1,
         m: common_vendor.o(handleUpload),
-        n: common_assets._imports_6,
+        n: common_assets._imports_6$1,
         o: common_vendor.o(handleUpload),
         p: common_assets._imports_7,
         q: common_vendor.o(handleUpload)

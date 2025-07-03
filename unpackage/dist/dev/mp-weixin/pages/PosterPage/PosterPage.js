@@ -71,6 +71,10 @@ const _sfc_main = {
     }
   }
 };
+if (!Array) {
+  const _component_tab_bar = common_vendor.resolveComponent("tab-bar");
+  _component_tab_bar();
+}
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
     a: common_vendor.o((...args) => $options.goBack && $options.goBack(...args)),

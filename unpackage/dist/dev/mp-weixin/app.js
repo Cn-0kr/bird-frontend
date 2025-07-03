@@ -11,6 +11,8 @@ if (!Math) {
   "./pages/PosterPage/PosterPage.js";
   "./pages/AnalyzeResultPage/AnalyzeResultPage.js";
   "./pages/AnalyzeWaitingPage/AnalyzeWaitingPage.js";
+  "./pages/AIChat/AIChat.js";
+  "./pages/BirdEncyclopedia/BirdEncyclopedia.js";
 }
 const _sfc_main = {
   onLaunch: function() {

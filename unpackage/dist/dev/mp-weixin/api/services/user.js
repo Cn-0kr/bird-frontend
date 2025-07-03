@@ -1,5 +1,5 @@
 "use strict";
-require("../../common/vendor.js");
+require("../../utils/request.js");
 const api_mocks_editIntroMock = require("../mocks/editIntroMock.js");
 class UserService {
   async getIntro() {

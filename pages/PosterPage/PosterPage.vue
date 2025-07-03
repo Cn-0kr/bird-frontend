@@ -50,6 +50,8 @@
 			/>
 			<button class="send-btn" @click="submitComment">发送</button>
 		</view>
+		<!-- 底部导航栏 -->
+		<tab-bar></tab-bar>
 	</view>
 </template>
 

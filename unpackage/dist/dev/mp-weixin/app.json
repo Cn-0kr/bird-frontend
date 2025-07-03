@@ -8,7 +8,9 @@
     "pages/NoobPage/NoobPage",
     "pages/PosterPage/PosterPage",
     "pages/AnalyzeResultPage/AnalyzeResultPage",
-    "pages/AnalyzeWaitingPage/AnalyzeWaitingPage"
+    "pages/AnalyzeWaitingPage/AnalyzeWaitingPage",
+    "pages/AIChat/AIChat",
+    "pages/BirdEncyclopedia/BirdEncyclopedia"
   ],
   "window": {
     "navigationBarTextStyle": "black",

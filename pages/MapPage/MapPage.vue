@@ -74,10 +74,10 @@
         <!-- 遮罩层 - 当信息卡片显示时 -->
         <view class="overlay" v-if="showInfoCard" @tap="showInfoCard = false"></view>
         
-		<view class="info-card" v-if="showInfoCard" style="background-color: white; padding: 20px; border: 1px solid black;">
+<!-- 		<view class="info-card" v-if="showInfoCard" style="background-color: white; padding: 20px; border: 1px solid black;">
 		  <text>Test InfoCard - ID: {{selectedLocation.id}}</text>
 		  <button @tap="closeInfoCard">Close</button>
-		</view>
+		</view> -->
 		
         <!-- 添加底部导航栏 -->
         <tab-bar></tab-bar>
