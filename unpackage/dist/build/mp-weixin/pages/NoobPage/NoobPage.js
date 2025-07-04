@@ -1,0 +1,1 @@
+"use strict";const e=require("../../common/vendor.js"),r={name:"BirdGuide"};const n=e._export_sfc(r,[["render",function(r,n,t,a,c,o){return{a:e.f(24,((e,r,n)=>({a:e})))}}],["__scopeId","data-v-6a99b819"]]);wx.createPage(n);

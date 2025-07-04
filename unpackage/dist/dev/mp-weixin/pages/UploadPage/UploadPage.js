@@ -31,8 +31,8 @@ const _sfc_main = {
       }, imageUrl.value ? {
         b: imageUrl.value
       } : {}, {
-        c: common_assets._imports_0$1,
-        d: common_assets._imports_1$1,
+        c: common_assets._imports_0,
+        d: common_assets._imports_1$2,
         e: common_assets._imports_2$1,
         f: common_assets._imports_3$1,
         g: imageUrl.value

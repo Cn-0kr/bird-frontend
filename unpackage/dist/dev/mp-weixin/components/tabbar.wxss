@@ -4,10 +4,13 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 50px;
+  height: 70rpx; /* 使用rpx单位 */
   display: flex;
   background-color: #ffffff;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.1);
+  border-top: 1rpx solid rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  transition: all 0.3s ease;
 }
 .tab-item.data-v-c6a4bdcf {
   flex: 1;
@@ -15,17 +18,149 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4px 0;
+  padding: 8rpx 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  cursor: pointer;
+}
+.tab-item.data-v-c6a4bdcf:active {
+  transform: scale(0.95);
+  background-color: rgba(46, 163, 183, 0.05);
+}
+.tab-item.data-v-c6a4bdcf::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 4rpx;
+  background: #2EA3B7;
+  border-radius: 2rpx;
+  transition: width 0.3s ease;
+}
+.tab-item.active.data-v-c6a4bdcf::before {
+  width: 40rpx;
+}
+.tab-icon-container.data-v-c6a4bdcf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48rpx;
+  height: 48rpx;
+  margin-bottom: 4rpx;
 }
 .tab-icon.data-v-c6a4bdcf {
-  width: 24px;
-  height: 24px;
-  margin-bottom: 2px;
+  width: 48rpx;
+  height: 48rpx;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+.tab-item.active .tab-icon.data-v-c6a4bdcf {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* 后备字体图标样式 */
+.tab-icon-fallback.data-v-c6a4bdcf {
+  font-size: 40rpx;
+  line-height: 48rpx;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tab-icon-fallback.active.data-v-c6a4bdcf {
+  opacity: 1;
+  transform: scale(1.1);
 }
 .tab-text.data-v-c6a4bdcf {
-  font-size: 12px;
-  color: #1D1D2B;
+  font-size: 20rpx;
+  color: #666;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  line-height: 1.2;
+  text-align: center;
 }
-.active .tab-text.data-v-c6a4bdcf {
+.tab-item.active .tab-text.data-v-c6a4bdcf {
   color: #2EA3B7;
+  font-weight: 600;
+  transform: scale(1.05);
+}
+
+/* 悬停效果（主要针对H5端） */
+@media (hover: hover) {
+.tab-item.data-v-c6a4bdcf:hover {
+    background-color: rgba(46, 163, 183, 0.03);
+}
+.tab-item:hover .tab-icon.data-v-c6a4bdcf,
+  .tab-item:hover .tab-icon-fallback.data-v-c6a4bdcf {
+    opacity: 0.9;
+    transform: translateY(-2rpx);
+}
+.tab-item:hover .tab-text.data-v-c6a4bdcf {
+    color: #2EA3B7;
+}
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 750rpx) {
+.tab-bar.data-v-c6a4bdcf {
+    height: 96rpx;
+}
+.tab-icon-container.data-v-c6a4bdcf {
+    width: 44rpx;
+    height: 44rpx;
+}
+.tab-icon.data-v-c6a4bdcf {
+    width: 44rpx;
+    height: 44rpx;
+}
+.tab-icon-fallback.data-v-c6a4bdcf {
+    font-size: 36rpx;
+    line-height: 44rpx;
+}
+.tab-text.data-v-c6a4bdcf {
+    font-size: 18rpx;
+}
+}
+
+/* 适配iphoneX等带有安全区域的设备 */
+@supports (bottom: env(safe-area-inset-bottom)) {
+.tab-bar.data-v-c6a4bdcf {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(100rpx + env(safe-area-inset-bottom));
+}
+}
+
+/* 暗色模式适配 */
+@media (prefers-color-scheme: dark) {
+.tab-bar.data-v-c6a4bdcf {
+    background-color: #1a1a1a;
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+.tab-text.data-v-c6a4bdcf {
+    color: #999;
+}
+.tab-item.active .tab-text.data-v-c6a4bdcf {
+    color: #4dd0e1;
+}
+.tab-item.data-v-c6a4bdcf::before {
+    background: #4dd0e1;
+}
+}
+
+/* 优化动画性能 */
+.tab-item.data-v-c6a4bdcf,
+.tab-icon.data-v-c6a4bdcf,
+.tab-icon-fallback.data-v-c6a4bdcf,
+.tab-text.data-v-c6a4bdcf {
+  will-change: transform, opacity;
+}
+
+/* 防止文本选中 */
+.tab-text.data-v-c6a4bdcf {
+  user-select: none;
+  -webkit-user-select: none;
 }

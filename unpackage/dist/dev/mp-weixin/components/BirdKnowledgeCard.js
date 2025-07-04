@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../common/vendor.js");
-const common_assets = require("../common/assets.js");
 const _sfc_main = {
   __name: "BirdKnowledgeCard",
   props: {
@@ -19,6 +18,51 @@ const _sfc_main = {
     const emit = __emit;
     const isLiked = common_vendor.ref(false);
     const imageLoaded = common_vendor.ref(false);
+    const ossConfig = {
+      baseUrl: "https://birdfront-oss.oss-cn-shanghai.aliyuncs.com"
+    };
+    const getOSSUrl = (filename, size = "icon") => {
+      if (!filename)
+        return "";
+      const cleanFilename = filename.startsWith("/") ? filename.slice(1) : filename;
+      let params = "";
+      switch (size) {
+        case "icon":
+          params = "?x-oss-process=image/resize,m_lfit,w_64,h_64/quality,q_90";
+          break;
+        case "small":
+          params = "?x-oss-process=image/resize,m_lfit,w_150,h_150/quality,q_90";
+          break;
+        case "medium":
+          params = "?x-oss-process=image/resize,m_lfit,w_300,h_300/quality,q_85";
+          break;
+        case "large":
+          params = "?x-oss-process=image/resize,m_lfit,w_600,h_600/quality,q_85";
+          break;
+        default:
+          params = "?x-oss-process=image/resize,m_lfit,w_64,h_64/quality,q_90";
+      }
+      return `${ossConfig.baseUrl}/${cleanFilename}${params}`;
+    };
+    const birdImageUrl = common_vendor.computed(() => {
+      return getOSSUrl(props.birdData.imageUrl, "large");
+    });
+    const likeIconUrl = common_vendor.computed(() => {
+      const iconPath = isLiked.value ? "static/icons/heart-filled.png" : "static/icons/heart.png";
+      return getOSSUrl(iconPath, "icon");
+    });
+    const shareIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/share.png", "icon"));
+    const habitatIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/habitat.png", "icon"));
+    const sizeIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/size.png", "icon"));
+    const weightIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/weight.png", "icon"));
+    const wingspanIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/wingspan.png", "icon"));
+    const dietIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/diet.png", "icon"));
+    const behaviorIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/behavior.png", "icon"));
+    const distributionIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/distribution.png", "icon"));
+    const conservationIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/conservation.png", "icon"));
+    const soundIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/sound.png", "icon"));
+    const playIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/play.png", "icon"));
+    const lifespanIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/lifespan.png", "icon"));
     const getConservationClass = (status) => {
       const statusMap = {
         "无危": "status-safe",
@@ -33,7 +77,7 @@ const _sfc_main = {
       imageLoaded.value = true;
     };
     const onImageError = () => {
-      common_vendor.index.__f__("error", "at components/BirdKnowledgeCard.vue:210", "鸟类图片加载失败");
+      common_vendor.index.__f__("error", "at components/BirdKnowledgeCard.vue:274", "鸟类图片加载失败");
     };
     const handleLike = () => {
       isLiked.value = !isLiked.value;
@@ -52,23 +96,23 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return {
-        a: __props.birdData.imageUrl,
+        a: birdImageUrl.value,
         b: common_vendor.o(onImageLoad),
         c: common_vendor.o(onImageError),
         d: common_vendor.t(__props.birdData.name),
         e: common_vendor.t(__props.birdData.scientificName),
-        f: isLiked.value ? "/static/icons/heart-filled.png" : "/static/icons/heart.png",
+        f: likeIconUrl.value,
         g: common_vendor.o(handleLike),
         h: isLiked.value ? 1 : "",
-        i: common_assets._imports_0$4,
+        i: shareIconUrl.value,
         j: common_vendor.o(handleShare),
-        k: common_assets._imports_1$6,
+        k: habitatIconUrl.value,
         l: common_vendor.t(__props.birdData.habitat),
-        m: common_assets._imports_2$4,
+        m: sizeIconUrl.value,
         n: common_vendor.t(__props.birdData.size),
-        o: common_assets._imports_3$4,
+        o: weightIconUrl.value,
         p: common_vendor.t(__props.birdData.weight),
-        q: common_assets._imports_4$4,
+        q: wingspanIconUrl.value,
         r: common_vendor.t(__props.birdData.wingspan),
         s: common_vendor.f(__props.birdData.characteristics.slice(0, 4), (characteristic, index, i0) => {
           return {
@@ -77,9 +121,9 @@ const _sfc_main = {
             c: `${index * 0.1}s`
           };
         }),
-        t: common_assets._imports_5$3,
+        t: dietIconUrl.value,
         v: common_vendor.t(__props.birdData.diet),
-        w: common_assets._imports_6$4,
+        w: behaviorIconUrl.value,
         x: common_vendor.t(__props.birdData.behavior),
         y: common_vendor.f(__props.birdData.funFacts.slice(0, 2), (fact, index, i0) => {
           return {
@@ -89,16 +133,16 @@ const _sfc_main = {
             d: `${index * 0.15}s`
           };
         }),
-        z: common_assets._imports_7$3,
+        z: distributionIconUrl.value,
         A: common_vendor.t(__props.birdData.distribution),
-        B: common_assets._imports_8$2,
+        B: conservationIconUrl.value,
         C: common_vendor.t(__props.birdData.conservationStatus),
         D: common_vendor.n(getConservationClass(__props.birdData.conservationStatus)),
-        E: common_assets._imports_9$1,
+        E: soundIconUrl.value,
         F: common_vendor.t(__props.birdData.callDescription),
-        G: common_assets._imports_10$1,
+        G: playIconUrl.value,
         H: common_vendor.o(playBirdCall),
-        I: common_assets._imports_11,
+        I: lifespanIconUrl.value,
         J: common_vendor.t(__props.birdData.lifespan),
         K: __props.isActive ? 1 : ""
       };

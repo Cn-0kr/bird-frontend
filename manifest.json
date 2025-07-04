@@ -1,7 +1,7 @@
 {
     "name" : "bird-frontend",
-    "appid" : "",
-    "description" : "",
+    "appid" : "__UNI__DB1E234",
+    "description" : "初始化",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -50,20 +50,17 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wxcfd85925a8045292",
         "setting" : {
             "urlCheck" : false
         },
         "usingComponents" : true,
-	"requiredPrivateInfos": [
-   	    "getLocation"
-  	],
-        "permission": {
-            "scope.userLocation": {
-                "desc": "您的位置信息将用于小程序定位"
+        "requiredPrivateInfos" : [ "getLocation", "chooseLocation" ],
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "您的位置信息将用于小程序定位"
             }
-        },
-	"requiredPrivateInfos": ["getLocation", "chooseLocation"]
+        }
     },
     "mp-alipay" : {
         "usingComponents" : true

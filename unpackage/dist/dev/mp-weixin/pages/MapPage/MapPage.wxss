@@ -2,11 +2,13 @@
 .container {
     position: relative;
     height: 100vh;
-    background-color: #fffbeb;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
 }
+
+/* 搜索栏样式 */
 .search-container {
     position: fixed;
-    top: var(--status-bar-height);
+    top: var(--status-bar-height, 44px);
     left: 0;
     right: 0;
     z-index: 100;
@@ -15,21 +17,48 @@
 .search-box {
     display: flex;
     align-items: center;
-    background-color: #ffffff;
-    border-radius: 100rpx;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 50rpx;
     padding: 16rpx 30rpx;
-    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+.search-box:focus-within {
+    box-shadow: 0 8rpx 30rpx rgba(59, 130, 246, 0.2);
+    transform: translateY(-2rpx);
 }
 .icon-search {
     margin-right: 16rpx;
     font-size: 32rpx;
-    color: #666;
+    color: #64748b;
 }
 .search-input {
     flex: 1;
     font-size: 28rpx;
-    color: #333;
+    color: #1e293b;
+    background: transparent;
+    border: none;
+    outline: none;
 }
+.search-btn {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    padding: 12rpx 20rpx;
+    border-radius: 30rpx;
+    margin-left: 10rpx;
+    transition: all 0.3s ease;
+}
+.search-btn:active {
+    transform: scale(0.95);
+}
+.search-btn-text {
+    font-size: 24rpx;
+    color: white;
+}
+
+/* 地图容器 */
 .map-container {
     position: relative;
     height: 100%;
@@ -39,39 +68,142 @@
     width: 100%;
     height: 100%;
 }
-.location-btn {
+
+/* 控制按钮 */
+.control-buttons {
     position: fixed;
     right: 30rpx;
-    bottom: 120rpx;
-    background-color: #ffffff;
+    bottom: 200rpx;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 15rpx;
+}
+.control-btn {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
     width: 80rpx;
     height: 80rpx;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
-    z-index: 100;
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+}
+.control-btn:active {
+    transform: scale(0.9);
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+}
+.control-btn:hover {
+    transform: translateY(-4rpx);
+    box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
 }
 .icon-location {
     font-size: 40rpx;
 }
-
-/* 添加点击效果 */
-.location-btn:active {
-    opacity: 0.8;
-    transform: scale(0.95);
+.zoom-icon {
+    font-size: 48rpx;
+    font-weight: bold;
+    color: #374151;
+}
+.layer-icon {
+    font-size: 36rpx;
 }
 
-/* 遮罩层 */
-.overlay {
+/* 加载覆盖层 */
+.loading-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 200;
+    -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+}
+.loading-content {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    padding: 40rpx;
+    border-radius: 20rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+.loading-spinner {
+    width: 60rpx;
+    height: 60rpx;
+    border: 4rpx solid #e2e8f0;
+    border-top: 4rpx solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20rpx;
+}
+@keyframes spin {
+0% { transform: rotate(0deg);
+}
+100% { transform: rotate(360deg);
+}
+}
+.loading-text {
+    color: #374151;
+    font-size: 28rpx;
+}
+
+/* 地图图例 */
+.map-legend {
+    position: fixed;
+    top: 200rpx;
+    left: 30rpx;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 16rpx;
+    padding: 20rpx;
+    box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+    z-index: 90;
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+    max-width: 300rpx;
+}
+.legend-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15rpx;
+}
+.legend-title {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #1e293b;
+}
+.legend-close {
+    font-size: 36rpx;
+    color: #64748b;
+    cursor: pointer;
+    padding: 5rpx;
+}
+.legend-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10rpx;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+}
+.legend-icon {
+    width: 32rpx;
+    height: 32rpx;
+}
+.legend-text {
+    font-size: 24rpx;
+    color: #475569;
 }
 
 /* 信息卡片样式 */
@@ -80,18 +212,23 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 300;
+    z-index: 150;
     padding: 30rpx;
     padding-bottom: calc(30rpx + env(safe-area-inset-bottom));
 }
 .info-card-inner {
-    background-color: #ffffff;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     border-radius: 24rpx;
     overflow: hidden;
-    box-shadow: 0 4rpx 30rpx rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.15);
     position: relative;
     max-height: 80vh;
     overflow-y: auto;
+    -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+}
+.info-card-header {
+    position: relative;
 }
 .info-card-close {
     position: absolute;
@@ -99,7 +236,7 @@
     right: 20rpx;
     width: 60rpx;
     height: 60rpx;
-    background-color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     color: #ffffff;
     border-radius: 50%;
     display: flex;
@@ -107,11 +244,28 @@
     justify-content: center;
     font-size: 36rpx;
     z-index: 10;
+    transition: all 0.3s ease;
+}
+.info-card-close:active {
+    transform: scale(0.9);
+    background: rgba(0, 0, 0, 0.8);
 }
 .info-card-image {
     width: 100%;
     height: 320rpx;
     object-fit: cover;
+}
+.info-card-badge {
+    position: absolute;
+    bottom: 20rpx;
+    left: 20rpx;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
 }
 .info-card-content {
     padding: 30rpx;
@@ -119,32 +273,28 @@
 .info-card-title {
     font-size: 36rpx;
     font-weight: bold;
-    color: #333;
-    margin-bottom: 10rpx;
-}
-.info-card-subtitle {
-    font-size: 24rpx;
-    color: #666;
-    margin-bottom: 20rpx;
+    color: #1e293b;
+    margin-bottom: 15rpx;
 }
 .info-card-description {
     font-size: 28rpx;
-    color: #333;
+    color: #475569;
     line-height: 1.6;
     margin-bottom: 30rpx;
 }
 
 /* 鸟类统计样式 */
 .bird-stats {
-    background-color: #f8f8f8;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
     border-radius: 16rpx;
-    padding: 20rpx;
-    margin-bottom: 30rpx;
+    padding: 25rpx;
+    margin-bottom: 25rpx;
+    border: 1rpx solid rgba(59, 130, 246, 0.1);
 }
 .stats-title {
     font-size: 28rpx;
-    font-weight: bold;
-    color: #333;
+    font-weight: 600;
+    color: #1e293b;
     margin-bottom: 20rpx;
 }
 .stats-row {
@@ -160,34 +310,205 @@
 .stat-value {
     font-size: 32rpx;
     font-weight: bold;
-    color: #07c160;
+    color: #3b82f6;
 }
 .stat-label {
     font-size: 24rpx;
-    color: #666;
-    margin-top: 10rpx;
+    color: #64748b;
+    margin-top: 8rpx;
+}
+
+/* 最佳时间 */
+.best-time {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 16rpx;
+    padding: 20rpx;
+    margin-bottom: 25rpx;
+    border: 1rpx solid rgba(245, 158, 11, 0.2);
+}
+.time-title {
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #92400e;
+    margin-bottom: 10rpx;
+}
+.time-content {
+    font-size: 24rpx;
+    color: #a16207;
+    line-height: 1.5;
+}
+
+/* 常见鸟类 */
+.common-birds {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-radius: 16rpx;
+    padding: 20rpx;
+    margin-bottom: 30rpx;
+    border: 1rpx solid rgba(34, 197, 94, 0.1);
+}
+.birds-title {
+    font-size: 26rpx;
+    font-weight: 600;
+    color: #166534;
+    margin-bottom: 15rpx;
+}
+.birds-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10rpx;
+}
+.bird-tag {
+    background: rgba(34, 197, 94, 0.1);
+    color: #166534;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    font-size: 22rpx;
+    border: 1rpx solid rgba(34, 197, 94, 0.2);
 }
 
 /* 操作按钮 */
 .action-buttons {
-    display: flex;
-    gap: 20rpx;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15rpx;
 }
 .action-btn {
-    flex: 1;
     height: 80rpx;
     border-radius: 40rpx;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 28rpx;
+    font-size: 24rpx;
     border: none;
+    transition: all 0.3s ease;
+    gap: 5rpx;
+}
+.action-btn:active {
+    transform: scale(0.95);
+}
+.btn-icon {
+    font-size: 28rpx;
 }
 .details-btn {
-    background-color: #f0f0f0;
-    color: #333;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    color: #374151;
+}
+.details-btn:hover {
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
 }
 .navigate-btn {
-    background-color: #07c160;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
     color: #ffffff;
+}
+.navigate-btn:hover {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+}
+.share-btn {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: #ffffff;
+}
+.share-btn:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 750rpx) {
+.search-container {
+        padding: 15rpx;
+}
+.control-buttons {
+        right: 20rpx;
+        bottom: 180rpx;
+}
+.control-btn {
+        width: 70rpx;
+        height: 70rpx;
+}
+.info-card {
+        padding: 20rpx;
+}
+.info-card-content {
+        padding: 25rpx;
+}
+.action-buttons {
+        grid-template-columns: 1fr;
+        gap: 10rpx;
+}
+.action-btn {
+        flex-direction: row;
+        justify-content: center;
+        gap: 10rpx;
+}
+.map-legend {
+        left: 20rpx;
+        top: 180rpx;
+        max-width: 250rpx;
+}
+}
+
+/* 暗色模式适配 */
+@media (prefers-color-scheme: dark) {
+.container {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+.search-box {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+.search-input {
+        color: #f1f5f9;
+}
+.control-btn {
+        background: linear-gradient(135deg, #334155 0%, #475569 100%);
+}
+.loading-content {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+.loading-text {
+        color: #f1f5f9;
+}
+.map-legend {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+.legend-title {
+        color: #f1f5f9;
+}
+.legend-text {
+        color: #cbd5e1;
+}
+.info-card-inner {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+.info-card-title {
+        color: #f1f5f9;
+}
+.info-card-description {
+        color: #cbd5e1;
+}
+}
+
+/* 动画效果 */
+@keyframes slideUp {
+from {
+        transform: translateY(100%);
+        opacity: 0;
+}
+to {
+        transform: translateY(0);
+        opacity: 1;
+}
+}
+.info-card {
+    animation: slideUp 0.3s ease-out;
+}
+
+/* 性能优化 */
+.control-btn, .action-btn, .search-box, .info-card-inner {
+    will-change: transform, box-shadow;
+}
+
+/* 防止文本选中 */
+.info-card-title, .stats-title, .legend-title {
+    user-select: none;
+    -webkit-user-select: none;
 }

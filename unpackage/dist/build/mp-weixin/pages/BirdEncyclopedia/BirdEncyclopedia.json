@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "图鉴",
+  "usingComponents": {
+    "bird-knowledge-card": "../../components/BirdKnowledgeCard"
+  }
+}

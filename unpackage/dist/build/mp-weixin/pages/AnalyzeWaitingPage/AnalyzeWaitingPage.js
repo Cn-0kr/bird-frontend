@@ -1,0 +1,1 @@
+"use strict";const e={data:()=>({}),mounted(){console.log("AnalyzeWaitingPage mounted")},methods:{}};const o=require("../../common/vendor.js")._export_sfc(e,[["render",function(e,o,t,n,c,r){return{}}],["__scopeId","data-v-9cd20fce"]]);wx.createPage(o);

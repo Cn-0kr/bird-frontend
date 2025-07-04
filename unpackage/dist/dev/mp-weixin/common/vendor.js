@@ -6137,7 +6137,7 @@ function populateParameters(fromRes, toRes) {
   let _SDKVersion = SDKVersion;
   const hostLanguage = (language || "").replace(/_/g, "-");
   const parameters = {
-    appId: "",
+    appId: "__UNI__DB1E234",
     appName: "bird-frontend",
     appVersion: "1.0.0",
     appVersionCode: "100",
@@ -6286,7 +6286,7 @@ const getAppBaseInfo = {
       hostName: _hostName,
       hostSDKVersion: SDKVersion,
       hostTheme: theme,
-      appId: "",
+      appId: "__UNI__DB1E234",
       appName: "bird-frontend",
       appVersion: "1.0.0",
       appVersionCode: "100",
@@ -7037,7 +7037,7 @@ function isConsoleWritable() {
 function initRuntimeSocketService() {
   const hosts = "192.168.10.25,192.168.198.1,192.168.98.1,127.0.0.1,172.27.208.1";
   const port = "8090";
-  const id = "mp-weixin_JrIBVN";
+  const id = "mp-weixin_ZZQTY4";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -7994,6 +7994,7 @@ exports.nextTick$1 = nextTick$1;
 exports.o = o;
 exports.onMounted = onMounted;
 exports.p = p;
+exports.reactive = reactive;
 exports.ref = ref;
 exports.resolveComponent = resolveComponent;
 exports.s = s;

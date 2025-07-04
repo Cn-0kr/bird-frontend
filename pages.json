@@ -1,5 +1,5 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
 		{
 			"path" : "pages/HomePage/HomePage",
 			"style" : 
@@ -113,8 +113,6 @@
 	    }
 	},
 	"uniIdRouter": {},
-	
-	// 添加位置权限配置
 	"permission": {
 		"scope.userLocation": {
 			"desc": "你的位置信息将用于地图定位和查找附近的鸟类观测点"

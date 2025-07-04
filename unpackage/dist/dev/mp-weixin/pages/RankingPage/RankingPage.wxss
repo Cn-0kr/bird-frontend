@@ -85,23 +85,19 @@
     width: 200px;
     height: 200px;
 }
-.secondary-ranks.data-v-97c3cf49 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-top: 40px;
-}
-.secondary-ranks .bird-item.data-v-97c3cf49 {
-    width: 100%;
-}
-.secondary-ranks .bird-image img.data-v-97c3cf49 {
+
+/* 为rank-4到rank-10设置统一的缩略图尺寸 */
+.rank-4 .bird-image img.data-v-97c3cf49,
+.rank-5 .bird-image img.data-v-97c3cf49,
+.rank-6 .bird-image img.data-v-97c3cf49,
+.rank-7 .bird-image img.data-v-97c3cf49,
+.rank-8 .bird-image img.data-v-97c3cf49,
+.rank-9 .bird-image img.data-v-97c3cf49,
+.rank-10 .bird-image img.data-v-97c3cf49 {
     width: 150px;
     height: 150px;
 }
 @media (max-width: 1200px) {
-.secondary-ranks.data-v-97c3cf49 {
-        grid-template-columns: 1fr;
-}
 .rank-2.data-v-97c3cf49, .rank-3.data-v-97c3cf49 {
         width: 100%;
 }
@@ -117,8 +113,5 @@
 .bird-image img.data-v-97c3cf49 {
         width: 100% !important;
         height: auto !important;
-}
-.secondary-ranks.data-v-97c3cf49 {
-        grid-template-columns: 1fr;
 }
 }

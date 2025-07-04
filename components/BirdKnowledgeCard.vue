@@ -3,7 +3,7 @@
       <!-- 卡片主图 -->
       <view class="card-header">
         <image 
-          :src="birdData.imageUrl" 
+          :src="birdImageUrl" 
           class="bird-image" 
           mode="aspectFill"
           @load="onImageLoad"
@@ -21,12 +21,12 @@
               :class="{ 'liked': isLiked }"
             >
               <image 
-                :src="isLiked ? '/static/icons/heart-filled.png' : '/static/icons/heart.png'" 
+                :src="likeIconUrl" 
                 class="action-icon"
               ></image>
             </view>
             <view class="action-btn share-btn" @click="handleShare">
-              <image src="/static/icons/share.png" class="action-icon"></image>
+              <image :src="shareIconUrl" class="action-icon"></image>
             </view>
           </view>
         </view>
@@ -37,7 +37,7 @@
         <!-- 基本信息网格 -->
         <view class="basic-info-grid">
           <view class="info-card habitat">
-            <image src="/static/icons/habitat.png" class="info-icon"></image>
+            <image :src="habitatIconUrl" class="info-icon"></image>
             <view class="info-content">
               <text class="info-label">栖息地</text>
               <text class="info-value">{{ birdData.habitat }}</text>
@@ -45,7 +45,7 @@
           </view>
           
           <view class="info-card size">
-            <image src="/static/icons/size.png" class="info-icon"></image>
+            <image :src="sizeIconUrl" class="info-icon"></image>
             <view class="info-content">
               <text class="info-label">体型</text>
               <text class="info-value">{{ birdData.size }}</text>
@@ -53,7 +53,7 @@
           </view>
           
           <view class="info-card weight">
-            <image src="/static/icons/weight.png" class="info-icon"></image>
+            <image :src="weightIconUrl" class="info-icon"></image>
             <view class="info-content">
               <text class="info-label">体重</text>
               <text class="info-value">{{ birdData.weight }}</text>
@@ -61,7 +61,7 @@
           </view>
           
           <view class="info-card wingspan">
-            <image src="/static/icons/wingspan.png" class="info-icon"></image>
+            <image :src="wingspanIconUrl" class="info-icon"></image>
             <view class="info-content">
               <text class="info-label">翼展</text>
               <text class="info-value">{{ birdData.wingspan }}</text>
@@ -88,7 +88,7 @@
         <view class="habits-section">
           <view class="habit-item diet">
             <view class="habit-header">
-              <image src="/static/icons/diet.png" class="habit-icon"></image>
+              <image :src="dietIconUrl" class="habit-icon"></image>
               <text class="habit-title">饮食</text>
             </view>
             <text class="habit-desc">{{ birdData.diet }}</text>
@@ -96,7 +96,7 @@
           
           <view class="habit-item behavior">
             <view class="habit-header">
-              <image src="/static/icons/behavior.png" class="habit-icon"></image>
+              <image :src="behaviorIconUrl" class="habit-icon"></image>
               <text class="habit-title">行为</text>
             </view>
             <text class="habit-desc">{{ birdData.behavior }}</text>
@@ -122,7 +122,7 @@
         <!-- 保护状态与分布 -->
         <view class="status-section">
           <view class="distribution-info">
-            <image src="/static/icons/distribution.png" class="distribution-icon"></image>
+            <image :src="distributionIconUrl" class="distribution-icon"></image>
             <view class="distribution-content">
               <text class="distribution-label">分布区域</text>
               <text class="distribution-text">{{ birdData.distribution }}</text>
@@ -130,7 +130,7 @@
           </view>
           
           <view class="conservation-status" :class="getConservationClass(birdData.conservationStatus)">
-            <image src="/static/icons/conservation.png" class="conservation-icon"></image>
+            <image :src="conservationIconUrl" class="conservation-icon"></image>
             <text class="conservation-text">{{ birdData.conservationStatus }}</text>
           </view>
         </view>
@@ -138,15 +138,15 @@
         <!-- 声音与寿命 -->
         <view class="bottom-info">
           <view class="sound-info">
-            <image src="/static/icons/sound.png" class="sound-icon"></image>
+            <image :src="soundIconUrl" class="sound-icon"></image>
             <text class="sound-text">{{ birdData.callDescription }}</text>
             <view class="play-sound-btn" @click="playBirdCall">
-              <image src="/static/icons/play.png" class="play-icon"></image>
+              <image :src="playIconUrl" class="play-icon"></image>
             </view>
           </view>
           
           <view class="lifespan-info">
-            <image src="/static/icons/lifespan.png" class="lifespan-icon"></image>
+            <image :src="lifespanIconUrl" class="lifespan-icon"></image>
             <text class="lifespan-text">{{ birdData.lifespan }}</text>
           </view>
         </view>
@@ -176,8 +176,72 @@
   const isLiked = ref(false);
   const imageLoaded = ref(false);
   
+  // OSS配置
+  const ossConfig = {
+    baseUrl: 'https://birdfront-oss.oss-cn-shanghai.aliyuncs.com'
+  };
+
+  // ========== OSS工具方法 ==========
+  /**
+   * 获取OSS图片URL
+   * @param {string} filename - 文件名
+   * @param {string} size - 尺寸类型
+   * @returns {string} 完整的OSS URL
+   */
+  const getOSSUrl = (filename, size = 'icon') => {
+    if (!filename) return '';
+    
+    // 确保文件名不以斜杠开头
+    const cleanFilename = filename.startsWith('/') ? filename.slice(1) : filename;
+    
+    // 根据尺寸类型设置不同的处理参数
+    let params = '';
+    switch(size) {
+      case 'icon':
+        params = '?x-oss-process=image/resize,m_lfit,w_64,h_64/quality,q_90';
+        break;
+      case 'small':
+        params = '?x-oss-process=image/resize,m_lfit,w_150,h_150/quality,q_90';
+        break;
+      case 'medium':
+        params = '?x-oss-process=image/resize,m_lfit,w_300,h_300/quality,q_85';
+        break;
+      case 'large':
+        params = '?x-oss-process=image/resize,m_lfit,w_600,h_600/quality,q_85';
+        break;
+      default:
+        params = '?x-oss-process=image/resize,m_lfit,w_64,h_64/quality,q_90';
+    }
+    
+    return `${ossConfig.baseUrl}/${cleanFilename}${params}`;
+  };
+  
   // ========== 计算属性 ==========
   
+  // 主图片URL
+  const birdImageUrl = computed(() => {
+    return getOSSUrl(props.birdData.imageUrl, 'large');
+  });
+  
+  // 所有图标的OSS URL
+  const likeIconUrl = computed(() => {
+    const iconPath = isLiked.value ? 'static/icons/heart-filled.png' : 'static/icons/heart.png';
+    return getOSSUrl(iconPath, 'icon');
+  });
+  
+  const shareIconUrl = computed(() => getOSSUrl('static/icons/share.png', 'icon'));
+  const habitatIconUrl = computed(() => getOSSUrl('static/icons/habitat.png', 'icon'));
+  const sizeIconUrl = computed(() => getOSSUrl('static/icons/size.png', 'icon'));
+  const weightIconUrl = computed(() => getOSSUrl('static/icons/weight.png', 'icon'));
+  const wingspanIconUrl = computed(() => getOSSUrl('static/icons/wingspan.png', 'icon'));
+  const dietIconUrl = computed(() => getOSSUrl('static/icons/diet.png', 'icon'));
+  const behaviorIconUrl = computed(() => getOSSUrl('static/icons/behavior.png', 'icon'));
+  const distributionIconUrl = computed(() => getOSSUrl('static/icons/distribution.png', 'icon'));
+  const conservationIconUrl = computed(() => getOSSUrl('static/icons/conservation.png', 'icon'));
+  const soundIconUrl = computed(() => getOSSUrl('static/icons/sound.png', 'icon'));
+  const playIconUrl = computed(() => getOSSUrl('static/icons/play.png', 'icon'));
+  const lifespanIconUrl = computed(() => getOSSUrl('static/icons/lifespan.png', 'icon'));
+
   /**
    * 获取保护状态的样式类
    * @param {String} status - 保护状态

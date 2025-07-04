@@ -9,7 +9,7 @@
     <!-- 图片容器 -->
     <view class="image-container">
       <image 
-        :src="posterData.imageUrl" 
+        :src="posterImageUrl" 
         class="poster-image"
         mode="aspectFill"
         @load="onImageLoad"
@@ -26,7 +26,7 @@
       <view class="image-overlay">
         <!-- 位置信息 -->
         <view v-if="posterData.location" class="location-tag">
-          <image src="/static/icons/location.png" class="location-icon"></image>
+          <image :src="locationIconUrl" class="location-icon"></image>
           <text class="location-text">{{ posterData.location }}</text>
         </view>
       </view>
@@ -37,7 +37,7 @@
       <!-- 用户信息 -->
       <view class="author-info">
         <image 
-          :src="posterData.author?.avatar || '/static/avatars/default.png'"
+          :src="authorAvatarUrl"
           class="author-avatar"
         />
         <view class="author-details">
@@ -70,7 +70,7 @@
         <view class="stats-container">
           <!-- 查看数 -->
           <view class="stat-item">
-            <image src="/static/icons/view.png" class="stat-icon"></image>
+            <image :src="viewIconUrl" class="stat-icon"></image>
             <text class="stat-text">{{ formatNumber(posterData.views) }}</text>
           </view>
         </view>
@@ -84,7 +84,7 @@
             @click.stop="handleLike"
           >
             <image 
-              :src="isLiked ? '/static/icons/thumbs-up-filled.png' : '/static/icons/thumbs-up.png'"
+              :src="likeIconUrl"
               class="action-icon like-icon"
             />
             <text class="action-text">{{ formatNumber(posterData.likes) }}</text>
@@ -100,7 +100,7 @@
             class="action-btn share-btn"
             @click.stop="handleShare"
           >
-            <image src="/static/icons/share.png" class="action-icon" />
+            <image :src="shareIconUrl" class="action-icon" />
           </view>
         </view>
       </view>
@@ -150,6 +150,49 @@ const isTextExpanded = ref(false);
 const isLiked = ref(false);
 const showLikeAnimation = ref(false);
 
+// OSS配置
+const ossConfig = {
+  baseUrl: 'https://birdfront-oss.oss-cn-shanghai.aliyuncs.com'
+};
+
+// ========== OSS工具方法 ==========
+/**
+ * 获取OSS图片URL
+ * @param {string} filename - 文件名
+ * @param {string} size - 尺寸类型
+ * @returns {string} 完整的OSS URL
+ */
+const getOSSUrl = (filename, size = 'medium') => {
+  if (!filename) return '';
+  
+  // 确保文件名不以斜杠开头
+  const cleanFilename = filename.startsWith('/') ? filename.slice(1) : filename;
+  
+  // 根据尺寸类型设置不同的处理参数
+  let params = '';
+  switch(size) {
+    case 'icon':
+      params = '?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90';
+      break;
+    case 'avatar':
+      params = '?x-oss-process=image/resize,m_lfit,w_120,h_120/quality,q_90';
+      break;
+    case 'small':
+      params = '?x-oss-process=image/resize,m_lfit,w_300,h_300/quality,q_85';
+      break;
+    case 'medium':
+      params = '?x-oss-process=image/resize,m_lfit,w_600,h_600/quality,q_80';
+      break;
+    case 'large':
+      params = '?x-oss-process=image/resize,m_lfit,w_1200,h_1200/quality,q_85';
+      break;
+    default:
+      params = '?x-oss-process=image/resize,m_lfit,w_600,h_600/quality,q_80';
+  }
+  
+  return `${ossConfig.baseUrl}/${cleanFilename}${params}`;
+};
+
 // ========== 计算属性 ==========
 const imageHeight = computed(() => {
   return props.posterData.imageHeight || 200;
@@ -157,6 +200,25 @@ const imageHeight = computed(() => {
 
 const isTextTruncated = computed(() => {
   return props.posterData.description && props.posterData.description.length > 50;
+});
+
+// 所有图片URL的计算属性
+const posterImageUrl = computed(() => {
+  return getOSSUrl(props.posterData.imageUrl, 'medium');
+});
+
+const authorAvatarUrl = computed(() => {
+  const avatarPath = props.posterData.author?.avatar || 'static/avatars/default.png';
+  return getOSSUrl(avatarPath, 'avatar');
+});
+
+const locationIconUrl = computed(() => getOSSUrl('static/icons/location.png', 'icon'));
+const viewIconUrl = computed(() => getOSSUrl('static/icons/view.png', 'icon'));
+const shareIconUrl = computed(() => getOSSUrl('static/icons/share.png', 'icon'));
+
+const likeIconUrl = computed(() => {
+  const iconPath = isLiked.value ? 'static/icons/thumbs-up-filled.png' : 'static/icons/thumbs-up.png';
+  return getOSSUrl(iconPath, 'icon');
 });
 
 // ========== 事件处理函数 ==========

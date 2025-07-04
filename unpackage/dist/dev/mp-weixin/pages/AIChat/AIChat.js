@@ -322,9 +322,9 @@ ${recognitionResult}`,
     }, { deep: true });
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_assets._imports_0$3,
+        a: common_assets._imports_0$1,
         b: common_vendor.o(goBack),
-        c: common_assets._imports_1$2,
+        c: common_assets._imports_1$3,
         d: isAIOnline.value ? 1 : "",
         e: isAITyping.value ? 1 : "",
         f: common_vendor.t(getAIStatus()),
@@ -346,7 +346,7 @@ ${recognitionResult}`,
           return common_vendor.e({
             a: message.type === "ai"
           }, message.type === "ai" ? common_vendor.e({
-            b: common_assets._imports_1$2,
+            b: common_assets._imports_1$3,
             c: message.isTyping
           }, message.isTyping ? {} : {
             d: formatMessageContent(message.content)
@@ -357,7 +357,7 @@ ${recognitionResult}`,
             g: common_vendor.o(($event) => copyMessage(message), message.id),
             h: message.isLiked ? "/static/icons/like-filled.png" : "/static/icons/like.png",
             i: common_vendor.o(($event) => likeMessage(message), message.id),
-            j: common_assets._imports_0$4,
+            j: common_assets._imports_5$2,
             k: common_vendor.o(($event) => shareMessage(), message.id)
           } : {}, {
             l: common_vendor.t(formatTime(message.timestamp))

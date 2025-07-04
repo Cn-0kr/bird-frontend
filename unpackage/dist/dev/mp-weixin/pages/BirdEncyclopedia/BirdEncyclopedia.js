@@ -360,14 +360,14 @@ const _sfc_main = {
     });
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_assets._imports_0$5,
+        a: common_assets._imports_0$1,
         b: common_vendor.o(goBack),
         c: currentMode.value === "search" ? "/static/icons/book.png" : "/static/icons/search.png",
         d: common_vendor.o(toggleMode),
         e: currentMode.value === "general" ? 1 : "",
         f: currentMode.value === "search"
       }, currentMode.value === "search" ? common_vendor.e({
-        g: common_assets._imports_1$3,
+        g: common_assets._imports_1,
         h: common_vendor.o([($event) => searchKeyword.value = $event.detail.value, onSearchInput]),
         i: common_vendor.o(handleSearchConfirm),
         j: searchKeyword.value,
@@ -429,7 +429,7 @@ const _sfc_main = {
         I: common_vendor.o(onTouchStart),
         J: common_vendor.o(onTouchMove),
         K: common_vendor.o(onTouchEnd),
-        L: common_assets._imports_5$2,
+        L: common_assets._imports_5$3,
         M: common_assets._imports_6$3,
         N: isFlipping.value ? 1 : "",
         O: common_assets._imports_7$2,
