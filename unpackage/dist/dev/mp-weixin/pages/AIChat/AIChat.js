@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const common_assets = require("../../common/assets.js");
 const _sfc_main = {
   __name: "AIChat",
   setup(__props) {
@@ -15,26 +14,55 @@ const _sfc_main = {
     const isRecording = common_vendor.ref(false);
     const voiceText = common_vendor.ref("正在录音...");
     const quickReplies = common_vendor.ref([]);
+    const ossConfig = {
+      baseUrl: "https://birdfront-oss.oss-cn-shanghai.aliyuncs.com"
+    };
+    const getOSSUrl = (filename, size = "icon") => {
+      if (!filename)
+        return "";
+      const cleanFilename = filename.startsWith("/") ? filename.slice(1) : filename;
+      let params = "";
+      switch (size) {
+        case "icon":
+          params = "?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90";
+          break;
+        case "small-icon":
+          params = "?x-oss-process=image/resize,m_lfit,w_32,h_32/quality,q_90";
+          break;
+        case "avatar":
+          params = "?x-oss-process=image/resize,m_lfit,w_80,h_80/quality,q_90";
+          break;
+        case "large":
+          params = "?x-oss-process=image/resize,m_lfit,w_120,h_120/quality,q_90";
+          break;
+        case "medium":
+          params = "?x-oss-process=image/resize,m_lfit,w_60,h_60/quality,q_90";
+          break;
+        default:
+          params = "?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90";
+      }
+      return `${ossConfig.baseUrl}/${cleanFilename}${params}`;
+    };
     const quickSuggestions = common_vendor.ref([
       {
         id: 1,
         text: "鸟类识别",
-        icon: "/static/icons/identify.png"
+        icon: "static/icons/identify.png"
       },
       {
         id: 2,
         text: "鸟类习性",
-        icon: "/static/icons/behavior.png"
+        icon: "static/icons/behavior.png"
       },
       {
         id: 3,
         text: "观鸟指南",
-        icon: "/static/icons/guide.png"
+        icon: "static/icons/guide.png"
       },
       {
         id: 4,
         text: "保护知识",
-        icon: "/static/icons/protection.png"
+        icon: "static/icons/protection.png"
       }
     ]);
     const canSend = common_vendor.computed(() => {
@@ -175,7 +203,7 @@ const _sfc_main = {
         await common_vendor.nextTick$1();
         scrollToBottom();
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/AIChat/AIChat.vue:499", "AI响应失败:", error);
+        common_vendor.index.__f__("error", "at pages/AIChat/AIChat.vue:544", "AI响应失败:", error);
         const aiMessageIndex = messageList.value.findIndex((msg) => msg.id === aiMessage.id);
         if (aiMessageIndex !== -1) {
           messageList.value.splice(aiMessageIndex, 1);
@@ -246,7 +274,7 @@ ${recognitionResult}`,
         scrollToBottom();
       } catch (error) {
         common_vendor.index.hideLoading();
-        common_vendor.index.__f__("error", "at pages/AIChat/AIChat.vue:609", "图片识别失败:", error);
+        common_vendor.index.__f__("error", "at pages/AIChat/AIChat.vue:654", "图片识别失败:", error);
         common_vendor.index.showToast({
           title: "识别失败，请重试",
           icon: "error"
@@ -280,9 +308,9 @@ ${recognitionResult}`,
     };
     const loadMoreMessages = async () => {
       try {
-        common_vendor.index.__f__("log", "at pages/AIChat/AIChat.vue:666", "加载更多消息");
+        common_vendor.index.__f__("log", "at pages/AIChat/AIChat.vue:711", "加载更多消息");
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/AIChat/AIChat.vue:668", "加载更多消息失败:", error);
+        common_vendor.index.__f__("error", "at pages/AIChat/AIChat.vue:713", "加载更多消息失败:", error);
       }
     };
     const clearChatHistory = () => {
@@ -311,8 +339,11 @@ ${recognitionResult}`,
         url: "/pages/ChatSettings/ChatSettings"
       });
     };
+    const onIconError = (error) => {
+      common_vendor.index.__f__("warn", "at pages/AIChat/AIChat.vue:773", "图标加载失败:", error);
+    };
     common_vendor.onMounted(() => {
-      common_vendor.index.__f__("log", "at pages/AIChat/AIChat.vue:726", "AI聊天页面初始化");
+      common_vendor.index.__f__("log", "at pages/AIChat/AIChat.vue:780", "AI聊天页面初始化");
       isAIOnline.value = true;
     });
     common_vendor.watch(messageList, () => {
@@ -322,66 +353,77 @@ ${recognitionResult}`,
     }, { deep: true });
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_assets._imports_0$1,
-        b: common_vendor.o(goBack),
-        c: common_assets._imports_1$3,
-        d: isAIOnline.value ? 1 : "",
-        e: isAITyping.value ? 1 : "",
-        f: common_vendor.t(getAIStatus()),
-        g: common_assets._imports_2$2,
-        h: common_vendor.o(showMenu),
-        i: messageList.value.length === 0
+        a: getOSSUrl("static/icons/back.png", "icon"),
+        b: common_vendor.o(onIconError),
+        c: common_vendor.o(goBack),
+        d: getOSSUrl("static/icons/ai-avatar.png", "avatar"),
+        e: common_vendor.o(onIconError),
+        f: isAIOnline.value ? 1 : "",
+        g: isAITyping.value ? 1 : "",
+        h: common_vendor.t(getAIStatus()),
+        i: getOSSUrl("static/icons/menu.png", "icon"),
+        j: common_vendor.o(onIconError),
+        k: common_vendor.o(showMenu),
+        l: messageList.value.length === 0
       }, messageList.value.length === 0 ? {
-        j: common_assets._imports_3$2,
-        k: common_vendor.f(quickSuggestions.value, (suggestion, k0, i0) => {
+        m: getOSSUrl("static/icons/ai-welcome.png", "large"),
+        n: common_vendor.o(onIconError),
+        o: common_vendor.f(quickSuggestions.value, (suggestion, k0, i0) => {
           return {
-            a: suggestion.icon,
-            b: common_vendor.t(suggestion.text),
-            c: suggestion.id,
-            d: common_vendor.o(($event) => sendSuggestion(suggestion), suggestion.id)
+            a: getOSSUrl(suggestion.icon, "icon"),
+            b: common_vendor.o(onIconError, suggestion.id),
+            c: common_vendor.t(suggestion.text),
+            d: suggestion.id,
+            e: common_vendor.o(($event) => sendSuggestion(suggestion), suggestion.id)
           };
         })
       } : {}, {
-        l: common_vendor.f(messageList.value, (message, index, i0) => {
+        p: common_vendor.f(messageList.value, (message, index, i0) => {
           return common_vendor.e({
             a: message.type === "ai"
           }, message.type === "ai" ? common_vendor.e({
-            b: common_assets._imports_1$3,
-            c: message.isTyping
+            b: getOSSUrl("static/icons/ai-avatar.png", "avatar"),
+            c: common_vendor.o(onIconError, message.id),
+            d: message.isTyping
           }, message.isTyping ? {} : {
-            d: formatMessageContent(message.content)
+            e: formatMessageContent(message.content)
           }, {
-            e: !message.isTyping
+            f: !message.isTyping
           }, !message.isTyping ? {
-            f: common_assets._imports_4$2,
-            g: common_vendor.o(($event) => copyMessage(message), message.id),
-            h: message.isLiked ? "/static/icons/like-filled.png" : "/static/icons/like.png",
-            i: common_vendor.o(($event) => likeMessage(message), message.id),
-            j: common_assets._imports_5$2,
-            k: common_vendor.o(($event) => shareMessage(), message.id)
+            g: getOSSUrl("static/icons/copy.png", "small-icon"),
+            h: common_vendor.o(onIconError, message.id),
+            i: common_vendor.o(($event) => copyMessage(message), message.id),
+            j: getOSSUrl(message.isLiked ? "static/icons/like-filled.png" : "static/icons/like.png", "small-icon"),
+            k: common_vendor.o(onIconError, message.id),
+            l: common_vendor.o(($event) => likeMessage(message), message.id),
+            m: getOSSUrl("static/icons/share.png", "small-icon"),
+            n: common_vendor.o(onIconError, message.id),
+            o: common_vendor.o(($event) => shareMessage(), message.id)
           } : {}, {
-            l: common_vendor.t(formatTime(message.timestamp))
+            p: common_vendor.t(formatTime(message.timestamp))
           }) : {
-            m: common_vendor.t(message.content),
-            n: common_vendor.t(formatTime(message.timestamp)),
-            o: common_assets._imports_6$2
+            q: common_vendor.t(message.content),
+            r: common_vendor.t(formatTime(message.timestamp)),
+            s: getOSSUrl("static/icons/user-avatar.png", "avatar"),
+            t: common_vendor.o(onIconError, message.id)
           }, {
-            p: message.id,
-            q: message.type === "user" ? 1 : "",
-            r: message.type === "ai" ? 1 : "",
-            s: `${index * 0.1}s`
+            v: message.id,
+            w: message.type === "user" ? 1 : "",
+            x: message.type === "ai" ? 1 : "",
+            y: `${index * 0.1}s`
           });
         }),
-        m: hasMoreMessages.value
+        q: hasMoreMessages.value
       }, hasMoreMessages.value ? {
-        n: common_assets._imports_7$1,
-        o: common_vendor.o(loadMoreMessages)
+        r: getOSSUrl("static/icons/loading.png", "small-icon"),
+        s: common_vendor.o(onIconError),
+        t: common_vendor.o(loadMoreMessages)
       } : {}, {
-        p: scrollTop.value,
-        q: common_vendor.o(onScrollToUpper),
-        r: quickReplies.value.length > 0
+        v: scrollTop.value,
+        w: common_vendor.o(onScrollToUpper),
+        x: quickReplies.value.length > 0
       }, quickReplies.value.length > 0 ? {
-        s: common_vendor.f(quickReplies.value, (reply, k0, i0) => {
+        y: common_vendor.f(quickReplies.value, (reply, k0, i0) => {
           return {
             a: common_vendor.t(reply.text),
             b: reply.id,
@@ -389,29 +431,33 @@ ${recognitionResult}`,
           };
         })
       } : {}, {
-        t: common_assets._imports_8,
-        v: common_vendor.o(startVoiceInput),
-        w: common_assets._imports_9,
-        x: common_vendor.o(selectImage),
-        y: common_vendor.o([($event) => inputText.value = $event.detail.value, onInputChange]),
-        z: common_vendor.o(onInputFocus),
-        A: common_vendor.o(onInputBlur),
-        B: common_vendor.o(sendMessage),
-        C: inputText.value,
-        D: canSend.value ? "/static/icons/send-active.png" : "/static/icons/send.png",
-        E: canSend.value ? 1 : "",
-        F: common_vendor.o(sendMessage),
-        G: inputText.value.length > 0
+        z: getOSSUrl("static/icons/voice.png", "icon"),
+        A: common_vendor.o(onIconError),
+        B: common_vendor.o(startVoiceInput),
+        C: getOSSUrl("static/icons/image.png", "icon"),
+        D: common_vendor.o(onIconError),
+        E: common_vendor.o(selectImage),
+        F: common_vendor.o([($event) => inputText.value = $event.detail.value, onInputChange]),
+        G: common_vendor.o(onInputFocus),
+        H: common_vendor.o(onInputBlur),
+        I: common_vendor.o(sendMessage),
+        J: inputText.value,
+        K: getOSSUrl(canSend.value ? "static/icons/send-active.png" : "static/icons/send.png", "icon"),
+        L: common_vendor.o(onIconError),
+        M: canSend.value ? 1 : "",
+        N: common_vendor.o(sendMessage),
+        O: inputText.value.length > 0
       }, inputText.value.length > 0 ? {
-        H: common_vendor.t(inputText.value.length)
+        P: common_vendor.t(inputText.value.length)
       } : {}, {
-        I: isVoiceRecording.value
+        Q: isVoiceRecording.value
       }, isVoiceRecording.value ? {
-        J: isRecording.value ? 1 : "",
-        K: common_assets._imports_10,
-        L: common_vendor.t(voiceText.value),
-        M: common_vendor.o(cancelVoiceInput),
-        N: common_vendor.o(confirmVoiceInput)
+        R: isRecording.value ? 1 : "",
+        S: getOSSUrl("static/icons/microphone.png", "large"),
+        T: common_vendor.o(onIconError),
+        U: common_vendor.t(voiceText.value),
+        V: common_vendor.o(cancelVoiceInput),
+        W: common_vendor.o(confirmVoiceInput)
       } : {});
     };
   }

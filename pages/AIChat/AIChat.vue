@@ -3,11 +3,11 @@
       <!-- 自定义导航栏 -->
       <view class="custom-navbar">
         <view class="navbar-left" @click="goBack">
-          <image src="/static/icons/back.png" class="back-icon"></image>
+          <image :src="getOSSUrl('static/icons/back.png', 'icon')" class="back-icon" @error="onIconError"></image>
         </view>
         <view class="navbar-center">
           <view class="ai-avatar-wrapper">
-            <image src="/static/icons/ai-avatar.png" class="ai-avatar"></image>
+            <image :src="getOSSUrl('static/icons/ai-avatar.png', 'avatar')" class="ai-avatar" @error="onIconError"></image>
             <view 
               class="status-indicator" 
               :class="{ 'status-online': isAIOnline, 'status-typing': isAITyping }"
@@ -20,7 +20,7 @@
         </view>
         <view class="navbar-right">
           <view class="menu-btn" @click="showMenu">
-            <image src="/static/icons/menu.png" class="menu-icon"></image>
+            <image :src="getOSSUrl('static/icons/menu.png', 'icon')" class="menu-icon" @error="onIconError"></image>
           </view>
         </view>
       </view>
@@ -37,7 +37,7 @@
         <!-- 欢迎消息 -->
         <view v-if="messageList.length === 0" class="welcome-section">
           <view class="welcome-card">
-            <image src="/static/icons/ai-welcome.png" class="welcome-icon"></image>
+            <image :src="getOSSUrl('static/icons/ai-welcome.png', 'large')" class="welcome-icon" @error="onIconError"></image>
             <text class="welcome-title">欢迎来到鸟类智能助手！</text>
             <text class="welcome-subtitle">我可以帮助您解答关于鸟类的任何问题</text>
             <view class="suggestion-buttons">
@@ -47,7 +47,7 @@
                 class="suggestion-btn"
                 @click="sendSuggestion(suggestion)"
               >
-                <image :src="suggestion.icon" class="suggestion-icon"></image>
+                <image :src="getOSSUrl(suggestion.icon, 'icon')" class="suggestion-icon" @error="onIconError"></image>
                 <text class="suggestion-text">{{ suggestion.text }}</text>
               </view>
             </view>
@@ -64,7 +64,7 @@
         >
           <!-- AI消息 -->
           <view v-if="message.type === 'ai'" class="ai-message-wrapper">
-            <image src="/static/icons/ai-avatar.png" class="message-avatar"></image>
+            <image :src="getOSSUrl('static/icons/ai-avatar.png', 'avatar')" class="message-avatar" @error="onIconError"></image>
             <view class="message-content">
               <view class="message-bubble ai-bubble">
                 <!-- 打字动画 -->
@@ -82,16 +82,17 @@
                 <!-- 消息工具栏 -->
                 <view v-if="!message.isTyping" class="message-toolbar">
                   <view class="toolbar-btn" @click="copyMessage(message)">
-                    <image src="/static/icons/copy.png" class="toolbar-icon"></image>
+                    <image :src="getOSSUrl('static/icons/copy.png', 'small-icon')" class="toolbar-icon" @error="onIconError"></image>
                   </view>
                   <view class="toolbar-btn" @click="likeMessage(message)">
                     <image 
-                      :src="message.isLiked ? '/static/icons/like-filled.png' : '/static/icons/like.png'" 
+                      :src="getOSSUrl(message.isLiked ? 'static/icons/like-filled.png' : 'static/icons/like.png', 'small-icon')" 
                       class="toolbar-icon"
+                      @error="onIconError"
                     ></image>
                   </view>
                   <view class="toolbar-btn" @click="shareMessage(message)">
-                    <image src="/static/icons/share.png" class="toolbar-icon"></image>
+                    <image :src="getOSSUrl('static/icons/share.png', 'small-icon')" class="toolbar-icon" @error="onIconError"></image>
                   </view>
                 </view>
               </view>
@@ -107,14 +108,14 @@
               </view>
               <text class="message-time">{{ formatTime(message.timestamp) }}</text>
             </view>
-            <image src="/static/icons/user-avatar.png" class="message-avatar"></image>
+            <image :src="getOSSUrl('static/icons/user-avatar.png', 'avatar')" class="message-avatar" @error="onIconError"></image>
           </view>
         </view>
   
         <!-- 加载更多消息 -->
         <view v-if="hasMoreMessages" class="load-more-section">
           <view class="load-more-btn" @click="loadMoreMessages">
-            <image src="/static/icons/loading.png" class="load-more-icon"></image>
+            <image :src="getOSSUrl('static/icons/loading.png', 'small-icon')" class="load-more-icon" @error="onIconError"></image>
             <text class="load-more-text">加载更多消息</text>
           </view>
         </view>
@@ -143,10 +144,10 @@
           <view class="input-container">
             <view class="extra-actions">
               <view class="action-btn voice-btn" @click="startVoiceInput">
-                <image src="/static/icons/voice.png" class="action-icon"></image>
+                <image :src="getOSSUrl('static/icons/voice.png', 'icon')" class="action-icon" @error="onIconError"></image>
               </view>
               <view class="action-btn image-btn" @click="selectImage">
-                <image src="/static/icons/image.png" class="action-icon"></image>
+                <image :src="getOSSUrl('static/icons/image.png', 'icon')" class="action-icon" @error="onIconError"></image>
               </view>
             </view>
             
@@ -169,8 +170,9 @@
               @click="sendMessage"
             >
               <image 
-                :src="canSend ? '/static/icons/send-active.png' : '/static/icons/send.png'" 
+                :src="getOSSUrl(canSend ? 'static/icons/send-active.png' : 'static/icons/send.png', 'icon')" 
                 class="send-icon"
+                @error="onIconError"
               ></image>
             </view>
           </view>
@@ -187,7 +189,7 @@
         <view class="voice-content">
           <view class="voice-animation">
             <view class="voice-circle" :class="{ 'voice-active': isRecording }"></view>
-            <image src="/static/icons/microphone.png" class="voice-icon"></image>
+            <image :src="getOSSUrl('static/icons/microphone.png', 'large')" class="voice-icon" @error="onIconError"></image>
           </view>
           <text class="voice-text">{{ voiceText }}</text>
           <view class="voice-actions">
@@ -215,27 +217,70 @@
   const voiceText = ref('正在录音...');
   const quickReplies = ref([]);
   
+  // ========== OSS配置 ==========
+  const ossConfig = {
+    baseUrl: 'https://birdfront-oss.oss-cn-shanghai.aliyuncs.com'
+  };
+  
+  // ========== OSS工具方法 ==========
+  /**
+   * 获取OSS图片URL
+   * @param {string} filename - 文件名
+   * @param {string} size - 尺寸类型
+   * @returns {string} 完整的OSS URL
+   */
+  const getOSSUrl = (filename, size = 'icon') => {
+    if (!filename) return '';
+    
+    // 确保文件名不以斜杠开头
+    const cleanFilename = filename.startsWith('/') ? filename.slice(1) : filename;
+    
+    // 根据尺寸类型设置不同的处理参数
+    let params = '';
+    switch(size) {
+      case 'icon':
+        params = '?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90';
+        break;
+      case 'small-icon':
+        params = '?x-oss-process=image/resize,m_lfit,w_32,h_32/quality,q_90';
+        break;
+      case 'avatar':
+        params = '?x-oss-process=image/resize,m_lfit,w_80,h_80/quality,q_90';
+        break;
+      case 'large':
+        params = '?x-oss-process=image/resize,m_lfit,w_120,h_120/quality,q_90';
+        break;
+      case 'medium':
+        params = '?x-oss-process=image/resize,m_lfit,w_60,h_60/quality,q_90';
+        break;
+      default:
+        params = '?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90';
+    }
+    
+    return `${ossConfig.baseUrl}/${cleanFilename}${params}`;
+  };
+  
   // ========== 快速建议数据 ==========
   const quickSuggestions = ref([
     {
       id: 1,
       text: '鸟类识别',
-      icon: '/static/icons/identify.png'
+      icon: 'static/icons/identify.png'
     },
     {
       id: 2,
       text: '鸟类习性',
-      icon: '/static/icons/behavior.png'
+      icon: 'static/icons/behavior.png'
     },
     {
       id: 3,
       text: '观鸟指南',
-      icon: '/static/icons/guide.png'
+      icon: 'static/icons/guide.png'
     },
     {
       id: 4,
       text: '保护知识',
-      icon: '/static/icons/protection.png'
+      icon: 'static/icons/protection.png'
     }
   ]);
   
@@ -718,6 +763,15 @@
       role: msg.type === 'user' ? 'user' : 'assistant',
       content: msg.content
     }));
+  };
+  
+  /**
+   * 图标加载失败处理
+   * @param {Event} error - 错误事件
+   */
+  const onIconError = (error) => {
+    console.warn('图标加载失败:', error);
+    // 可以设置默认图标或其他降级处理
   };
   
   // ========== 生命周期 ==========

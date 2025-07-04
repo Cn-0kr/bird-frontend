@@ -19,10 +19,11 @@
           class="swiper-item"
         >
           <image 
-            :src="banner.imageUrl" 
+            :src="getOSSUrl(banner.imageUrl, 'banner')" 
             class="banner-image"
             mode="aspectFill"
             @load="onBannerLoad"
+            @error="onImageError"
           ></image>
           <view class="banner-overlay">
             <view class="banner-content">
@@ -38,7 +39,7 @@
     <view class="search-nav-section">
       <view class="search-wrapper">
         <view class="search-input-container">
-          <image src="/static/icons/search.png" class="search-icon"></image>
+          <image :src="getOSSUrl('static/icons/search.png', 'icon')" class="search-icon" @error="onIconError"></image>
           <input 
             type="text" 
             placeholder="搜索鸟类名称..." 
@@ -55,7 +56,7 @@
           @click="handleSearch"
           :class="{ 'search-btn-active': isSearchFocused }"
         >
-          <image src="/static/icons/search-white.png" class="search-btn-icon"></image>
+          <image :src="getOSSUrl('static/icons/search-white.png', 'icon')" class="search-btn-icon" @error="onIconError"></image>
         </view>
       </view>
 
@@ -67,7 +68,7 @@
           hover-class="action-btn-hover"
         >
           <view class="action-icon-wrapper">
-            <image src="/static/icons/ranking.png" class="action-icon"></image>
+            <image :src="getOSSUrl('static/icons/ranking.png', 'icon')" class="action-icon" @error="onIconError"></image>
           </view>
           <text class="action-text">排行榜</text>
         </navigator>
@@ -78,7 +79,7 @@
           hover-class="action-btn-hover"
         >
           <view class="action-icon-wrapper">
-            <image src="/static/icons/guide.png" class="action-icon"></image>
+            <image :src="getOSSUrl('static/icons/guide.png', 'icon')" class="action-icon" @error="onIconError"></image>
           </view>
           <text class="action-text">引导</text>
         </navigator>
@@ -89,7 +90,7 @@
           hover-class="action-btn-hover"
         >
           <view class="action-icon-wrapper">
-            <image src="/static/icons/encyclopedia.png" class="action-icon"></image>
+            <image :src="getOSSUrl('static/icons/encyclopedia.png', 'icon')" class="action-icon" @error="onIconError"></image>
           </view>
           <text class="action-text">鸟类图鉴</text>
         </navigator>
@@ -100,7 +101,7 @@
           hover-class="action-btn-hover"
         >
           <view class="action-icon-wrapper">
-            <image src="/static/icons/ai-chat.png" class="action-icon"></image>
+            <image :src="getOSSUrl('static/icons/ai-chat.png', 'icon')" class="action-icon" @error="onIconError"></image>
           </view>
           <text class="action-text">智能助手</text>
         </navigator>
@@ -150,7 +151,7 @@
 
       <!-- 无数据状态 -->
       <view v-if="!isLoading && posterList.length === 0" class="empty-state">
-        <image src="/static/icons/empty-bird.png" class="empty-icon"></image>
+        <image :src="getOSSUrl('static/icons/empty-bird.png', 'large')" class="empty-icon" @error="onIconError"></image>
         <text class="empty-text">暂无鸟类记录</text>
         <text class="empty-subtitle">快去记录你的第一次发现吧！</text>
       </view>
@@ -175,25 +176,77 @@ const leftColumn = ref([]);
 const rightColumn = ref([]);
 const currentBannerIndex = ref(0);
 
+// ========== OSS配置 ==========
+const ossConfig = {
+  baseUrl: 'https://birdfront-oss.oss-cn-shanghai.aliyuncs.com'
+};
+
+// ========== OSS工具方法 ==========
+/**
+ * 获取OSS图片URL
+ * @param {string} filename - 文件名
+ * @param {string} size - 尺寸类型
+ * @returns {string} 完整的OSS URL
+ */
+const getOSSUrl = (filename, size = 'icon') => {
+  if (!filename) return '';
+  
+  // 确保文件名不以斜杠开头
+  const cleanFilename = filename.startsWith('/') ? filename.slice(1) : filename;
+  
+  // 根据尺寸类型设置不同的处理参数
+  let params = '';
+  switch(size) {
+    case 'icon':
+      params = '?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90';
+      break;
+    case 'small-icon':
+      params = '?x-oss-process=image/resize,m_lfit,w_32,h_32/quality,q_90';
+      break;
+    case 'avatar':
+      params = '?x-oss-process=image/resize,m_lfit,w_80,h_80/quality,q_90';
+      break;
+    case 'large':
+      params = '?x-oss-process=image/resize,m_lfit,w_120,h_120/quality,q_90';
+      break;
+    case 'medium':
+      params = '?x-oss-process=image/resize,m_lfit,w_200,h_200/quality,q_85';
+      break;
+    case 'banner':
+      params = '?x-oss-process=image/resize,m_lfit,w_750,h_400/quality,q_85';
+      break;
+    case 'post':
+      params = '?x-oss-process=image/resize,m_lfit,w_400,h_600/quality,q_85';
+      break;
+    case 'post-thumb':
+      params = '?x-oss-process=image/resize,m_lfit,w_300,h_450/quality,q_80';
+      break;
+    default:
+      params = '?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90';
+  }
+  
+  return `${ossConfig.baseUrl}/${cleanFilename}${params}`;
+};
+
 // ========== Banner轮播数据 ==========
 const bannerList = ref([
   {
-    imageUrl: '/static/banner/toucan-banner.jpg',
+    imageUrl: 'static/banner/toucan-banner.jpg',
     title: '发现自然之美',
     subtitle: '记录每一次与鸟类的美妙邂逅'
   },
   {
-    imageUrl: '/static/banner/eagle-banner.jpg',
+    imageUrl: 'static/banner/eagle-banner.jpg',
     title: '翱翔天际',
     subtitle: '见证猛禽的威武与优雅'
   },
   {
-    imageUrl: '/static/banner/peacock-banner.jpg',
+    imageUrl: 'static/banner/peacock-banner.jpg',
     title: '绚烂羽翼',
     subtitle: '感受大自然的色彩魅力'
   },
   {
-    imageUrl: '/static/banner/hummingbird-banner.jpg',
+    imageUrl: 'static/banner/hummingbird-banner.jpg',
     title: '精灵悬停',
     subtitle: '捕捉蜂鸟的瞬间之美'
   }
@@ -203,56 +256,56 @@ const bannerList = ref([
 const mockData = [
   {
     id: 1,
-    imageUrl: '/static/posts/bird1.jpg',
+    imageUrl: 'static/posts/bird1.jpg',
     imageHeight: 200,
     description: '今天在公园拍到的小鸟，真的太可爱了！',
     views: 1223,
     likes: 12,
     author: {
       name: '鸟类爱好者',
-      avatar: '/static/avatars/user1.png'
+      avatar: 'static/avatars/user1.png'
     },
     location: '北京·朝阳公园',
     publishTime: '2小时前'
   },
   {
     id: 2,
-    imageUrl: '/static/posts/bird2.jpg',
+    imageUrl: 'static/posts/bird2.jpg',
     imageHeight: 280,
     description: '清晨6点，记录到了珍贵的候鸟迁徙场景',
     views: 25678,
     likes: 1892,
     author: {
       name: '自然摄影师',
-      avatar: '/static/avatars/user2.png'
+      avatar: 'static/avatars/user2.png'
     },
     location: '上海·世纪公园',
     publishTime: '5小时前'
   },
   {
     id: 3,
-    imageUrl: '/static/posts/bird3.jpg',
+    imageUrl: 'static/posts/bird3.jpg',
     imageHeight: 220,
     description: '蜂鸟悬停采蜜的瞬间，大自然的精灵',
     views: 5432,
     likes: 234,
     author: {
       name: '野生动物保护者',
-      avatar: '/static/avatars/user3.png'
+      avatar: 'static/avatars/user3.png'
     },
     location: '云南·西双版纳',
     publishTime: '1天前'
   },
   {
     id: 4,
-    imageUrl: '/static/posts/bird4.jpg',
+    imageUrl: 'static/posts/bird4.jpg',
     imageHeight: 300,
     description: '金刚鹦鹉的绚烂色彩，热带雨林的瑰宝',
     views: 8765,
     likes: 456,
     author: {
       name: '生态研究员',
-      avatar: '/static/avatars/user4.jpg'
+      avatar: 'static/avatars/user4.jpg'
     },
     location: '海南·亚龙湾',
     publishTime: '2天前'
@@ -437,14 +490,41 @@ const loadMoreData = async () => {
   }
 };
 
+/**
+ * 图标加载失败处理
+ * @param {Event} error - 错误事件
+ */
+const onIconError = (error) => {
+  console.warn('图标加载失败:', error);
+  // 可以设置默认图标或其他降级处理
+};
+
+/**
+ * 图片加载失败处理
+ * @param {Event} error - 错误事件
+ */
+const onImageError = (error) => {
+  console.warn('图片加载失败:', error);
+  // 可以设置默认图片或其他降级处理
+};
+
 // ========== 生命周期 ==========
 onMounted(async () => {
   try {
     // 模拟API加载延迟
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    // 初始化数据
-    posterList.value = [...mockData];
+    // 初始化数据，为图片URL添加OSS处理
+    const processedData = mockData.map(item => ({
+      ...item,
+      imageUrl: getOSSUrl(item.imageUrl, 'post-thumb'),
+      author: {
+        ...item.author,
+        avatar: getOSSUrl(item.author.avatar, 'avatar')
+      }
+    }));
+    
+    posterList.value = processedData;
     redistributePosters();
     
   } catch (error) {

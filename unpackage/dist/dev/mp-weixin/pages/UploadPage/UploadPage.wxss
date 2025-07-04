@@ -4,8 +4,8 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     background-color: #e6fae9;
+    position: relative;
 }
 .header {
     text-align: left;
@@ -18,9 +18,12 @@
 	opacity: 1;
 }
 .title {
-    text-align: left; /* 设置文字左对齐 */
-    line-height: 2; /* 设置行高以增加行间距 */
+    text-align: left;
+    line-height: 2;
     color: #1e873c;
+    font-size: 28rpx;
+    font-weight: 400;
+    display: block;
 }
 .main-content {
     width: 100%;
@@ -40,6 +43,8 @@
     width: 600rpx;
     height: 600rpx;
     border-radius: 20rpx;
+    box-shadow: 0 8rpx 32rpx rgba(30, 135, 60, 0.15);
+    border: 4rpx solid rgba(30, 135, 60, 0.1);
 }
 .placeholder {
     padding: 40rpx;
@@ -50,26 +55,21 @@
 	width: 180px;
 	height: 36px;
 	opacity: 1;
-	/** 文本1 */
-	font-size: 18px;
-	font-weight: 400;
-	letter-spacing: 0px;
-	line-height: 26.06px;
-	color: #1e873c;
-	text-align: left;
-	vertical-align: top;
 }
 .placeholder-text {
     color: #1e873c;
     font-size: 28rpx;
 	white-space: nowrap;
+    font-weight: 400;
+    letter-spacing: 0px;
+    line-height: 26.06px;
 }
 .static-images {
     position: absolute;
 	left: 14px;
 	top: 185px;
     width: 50.33px;
-    height: 41.99px; /* 根据需要调整高度 */
+    height: 41.99px;
 	z-index: 10;
 }
 .image-0 {
@@ -93,7 +93,7 @@
     width: 50.33px;
     height: 37.99px;
 }
-.envelope{
+.envelope {
 	position: absolute;
 	left: 44px;
 	top: 205px;
@@ -101,50 +101,75 @@
 	height: 41.49px;
 	opacity: 1;
 	transform: rotate(19.88deg);
+    transition: all 0.3s ease;
+}
+.envelope:hover {
+    transform: rotate(19.88deg) scale(1.1);
 }
 .button-container {
 	position: absolute;
 	left: 0px;
 	top: 549.59px;
     width: 100%;
-    /* display: flex; */
     justify-content: center;
     padding: 20rpx;
 }
 .two-buttons {
     display: flex;
     gap: 30rpx;
+    justify-content: center;
+    align-items: center;
+}
+.upload-buttons {
+    position: relative;
+    width: 100%;
+    height: 60px;
 }
 .btn {
     padding: 20rpx 40rpx;
     border-radius: 100rpx;
     font-size: 28rpx;
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+}
+.btn:active {
+    transform: scale(0.95);
 }
 .btn-primary {
 	position: absolute;
-	left:60px;
+	left: 60px;
 	top: 10px;
     background-color: #059669;
     color: white;
+    box-shadow: 0 4rpx 16rpx rgba(5, 150, 105, 0.3);
+}
+.btn-primary:active {
+    background-color: #047857;
+    box-shadow: 0 2rpx 8rpx rgba(5, 150, 105, 0.4);
 }
 .btn-secondary {
 	position: absolute;
-	left:230px;
+	left: 230px;
 	top: 10px;
     background-color: #f3f4f6;
     color: #1f2937;
+    border: 2rpx solid #e5e7eb;
 }
-.rectangle{
+.btn-secondary:active {
+    background-color: #e5e7eb;
+    border-color: #d1d5db;
+}
+.rectangle {
 	position: absolute;
-	left:40px;
+	left: 40px;
 	top: 0px;
-	/* background-color: #059669; */
-	color: white;
 	width: 265px;
 	height: 57px;
 	z-index: 1;
+    transition: all 0.3s ease;
 }
-.circle{
+.circle {
 	position: absolute;
 	left: 55px;
 	top: 12px;
@@ -152,8 +177,9 @@
 	height: 36px;
 	opacity: 1;
 	z-index: 2;
+    transition: all 0.3s ease;
 }
-.arrow{
+.arrow {
 	position: absolute;
 	left: 60.5px;
 	top: 0px;
@@ -161,8 +187,9 @@
 	height: 60px;
 	opacity: 1;
 	z-index: 3;
+    transition: all 0.3s ease;
 }
-.word{
+.word {
 	position: absolute;
 	left: 133px;
 	top: 25px;
@@ -170,6 +197,147 @@
 	height: 25px;
 	opacity: 1;
 	z-index: 4;
+    transition: all 0.3s ease;
 }
 
+/* 上传按钮组合的悬停效果 */
+.upload-buttons:active .rectangle {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+.upload-buttons:active .circle {
+    transform: scale(0.95);
+}
+.upload-buttons:active .arrow {
+    transform: translateX(5px);
+}
+.upload-buttons:active .word {
+    transform: scale(0.98);
+    opacity: 0.8;
+}
 
+/* 响应式适配 */
+@media screen and (max-width: 750rpx) {
+.header {
+        left: 100px;
+        top: 120px;
+        width: 150px;
+}
+.title {
+        font-size: 26rpx;
+        line-height: 1.8;
+}
+.preview-image {
+        top: 200px;
+        width: 500rpx;
+        height: 500rpx;
+}
+.placeholder {
+        left: 30px;
+        top: 400px;
+        width: 200px;
+}
+.placeholder-text {
+        font-size: 26rpx;
+}
+.static-images {
+        left: 10px;
+        top: 160px;
+}
+.envelope {
+        left: 35px;
+        top: 180px;
+        width: 40px;
+        height: 35px;
+}
+.button-container {
+        top: 480px;
+}
+.rectangle {
+        left: 30px;
+        width: 240px;
+        height: 50px;
+}
+.circle {
+        left: 45px;
+        top: 10px;
+        width: 32px;
+        height: 32px;
+}
+.arrow {
+        left: 50px;
+        top: -2px;
+        width: 24px;
+        height: 55px;
+}
+.word {
+        left: 120px;
+        top: 22px;
+        width: 110px;
+        height: 22px;
+}
+.btn-primary {
+        left: 40px;
+        top: 8px;
+        padding: 16rpx 32rpx;
+        font-size: 26rpx;
+}
+.btn-secondary {
+        left: 200px;
+        top: 8px;
+        padding: 16rpx 32rpx;
+        font-size: 26rpx;
+}
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+.container {
+        background-color: #064e3b;
+}
+.title {
+        color: #a7f3d0;
+}
+.placeholder-text {
+        color: #a7f3d0;
+}
+.btn-primary {
+        background-color: #047857;
+}
+.btn-secondary {
+        background-color: #374151;
+        color: #f9fafb;
+        border-color: #4b5563;
+}
+.preview-image {
+        border-color: rgba(167, 243, 208, 0.2);
+        box-shadow: 0 8rpx 32rpx rgba(6, 78, 59, 0.3);
+}
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+from {
+        opacity: 0;
+        transform: translateY(30rpx);
+}
+to {
+        opacity: 1;
+        transform: translateY(0);
+}
+}
+.image-preview {
+    animation: fadeInUp 0.6s ease-out;
+}
+.two-buttons {
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+/* 提升用户体验的加载效果 */
+.preview-image {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.preview-image[src] {
+    opacity: 1;
+}

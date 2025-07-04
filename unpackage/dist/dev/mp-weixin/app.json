@@ -6,9 +6,6 @@
     "pages/ProfilePage/ProfilePage",
     "pages/RankingPage/RankingPage",
     "pages/NoobPage/NoobPage",
-    "pages/PosterPage/PosterPage",
-    "pages/AnalyzeResultPage/AnalyzeResultPage",
-    "pages/AnalyzeWaitingPage/AnalyzeWaitingPage",
     "pages/AIChat/AIChat",
     "pages/BirdEncyclopedia/BirdEncyclopedia"
   ],

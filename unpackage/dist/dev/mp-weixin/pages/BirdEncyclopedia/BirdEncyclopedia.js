@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const common_assets = require("../../common/assets.js");
 if (!Math) {
   BirdKnowledgeCard();
 }
@@ -14,6 +13,35 @@ const _sfc_main = {
     const searchResults = common_vendor.ref([]);
     const currentCardIndex = common_vendor.ref(0);
     const birdCards = common_vendor.ref([]);
+    const ossConfig = {
+      baseUrl: "https://birdfront-oss.oss-cn-shanghai.aliyuncs.com"
+    };
+    const getOSSUrl = (filename, size = "icon") => {
+      if (!filename)
+        return "";
+      const cleanFilename = filename.startsWith("/") ? filename.slice(1) : filename;
+      let params = "";
+      switch (size) {
+        case "icon":
+          params = "?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90";
+          break;
+        case "small-icon":
+          params = "?x-oss-process=image/resize,m_lfit,w_32,h_32/quality,q_90";
+          break;
+        case "medium":
+          params = "?x-oss-process=image/resize,m_lfit,w_200,h_200/quality,q_85";
+          break;
+        case "large":
+          params = "?x-oss-process=image/resize,m_lfit,w_120,h_120/quality,q_90";
+          break;
+        case "bird-image":
+          params = "?x-oss-process=image/resize,m_lfit,w_600,h_400/quality,q_85";
+          break;
+        default:
+          params = "?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90";
+      }
+      return `${ossConfig.baseUrl}/${cleanFilename}${params}`;
+    };
     const isFlipping = common_vendor.ref(false);
     const touchStartY = common_vendor.ref(0);
     const touchCurrentY = common_vendor.ref(0);
@@ -27,7 +55,7 @@ const _sfc_main = {
         id: 1,
         name: "巨嘴鸟",
         scientificName: "Ramphastos sulfuratus",
-        imageUrl: "/static/birds/toucan.jpg",
+        imageUrl: "static/birds/toucan.jpg",
         tags: ["热带鸟类", "彩色", "大型"],
         habitat: "热带雨林",
         size: "体长50-65cm",
@@ -56,7 +84,7 @@ const _sfc_main = {
         id: 2,
         name: "蜂鸟",
         scientificName: "Trochilidae",
-        imageUrl: "/static/birds/hummingbird.jpg",
+        imageUrl: "static/birds/hummingbird.jpg",
         tags: ["小型鸟类", "快速", "悬停"],
         habitat: "花园、森林边缘",
         size: "体长5-25cm",
@@ -86,7 +114,7 @@ const _sfc_main = {
         id: 3,
         name: "孔雀",
         scientificName: "Pavo cristatus",
-        imageUrl: "/static/birds/peacock.jpg",
+        imageUrl: "static/birds/peacock.jpg",
         tags: ["大型鸟类", "华丽", "地栖"],
         habitat: "森林、公园、农田",
         size: "体长100-115cm",
@@ -116,7 +144,7 @@ const _sfc_main = {
         id: 4,
         name: "老鹰",
         scientificName: "Aquila chrysaetos",
-        imageUrl: "/static/birds/eagle.jpg",
+        imageUrl: "static/birds/eagle.jpg",
         tags: ["猛禽", "大型", "捕食者"],
         habitat: "山地、草原、森林",
         size: "体长75-100cm",
@@ -301,7 +329,7 @@ const _sfc_main = {
         );
         searchResults.value = results;
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/BirdEncyclopedia/BirdEncyclopedia.vue:627", "搜索失败:", error);
+        common_vendor.index.__f__("error", "at pages/BirdEncyclopedia/BirdEncyclopedia.vue:671", "搜索失败:", error);
         common_vendor.index.showToast({
           title: "搜索失败",
           icon: "error"
@@ -319,12 +347,18 @@ const _sfc_main = {
       try {
         birdCards.value = [...mockBirdData];
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/BirdEncyclopedia/BirdEncyclopedia.vue:659", "加载数据失败:", error);
+        common_vendor.index.__f__("error", "at pages/BirdEncyclopedia/BirdEncyclopedia.vue:703", "加载数据失败:", error);
         common_vendor.index.showToast({
           title: "加载失败",
           icon: "error"
         });
       }
+    };
+    const onIconError = (error) => {
+      common_vendor.index.__f__("warn", "at pages/BirdEncyclopedia/BirdEncyclopedia.vue:716", "图标加载失败:", error);
+    };
+    const onImageError = (error) => {
+      common_vendor.index.__f__("warn", "at pages/BirdEncyclopedia/BirdEncyclopedia.vue:725", "图片加载失败:", error);
     };
     common_vendor.watch([birdCards, currentCardIndex], ([newBirdCards, newIndex]) => {
       const totalCards = parseInt(newBirdCards.length) || 0;
@@ -360,86 +394,97 @@ const _sfc_main = {
     });
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_assets._imports_0$1,
-        b: common_vendor.o(goBack),
-        c: currentMode.value === "search" ? "/static/icons/book.png" : "/static/icons/search.png",
-        d: common_vendor.o(toggleMode),
-        e: currentMode.value === "general" ? 1 : "",
-        f: currentMode.value === "search"
+        a: getOSSUrl("static/icons/back.png", "icon"),
+        b: common_vendor.o(onIconError),
+        c: common_vendor.o(goBack),
+        d: getOSSUrl(currentMode.value === "search" ? "static/icons/book.png" : "static/icons/search.png", "icon"),
+        e: common_vendor.o(onIconError),
+        f: common_vendor.o(toggleMode),
+        g: currentMode.value === "general" ? 1 : "",
+        h: currentMode.value === "search"
       }, currentMode.value === "search" ? common_vendor.e({
-        g: common_assets._imports_1,
-        h: common_vendor.o([($event) => searchKeyword.value = $event.detail.value, onSearchInput]),
-        i: common_vendor.o(handleSearchConfirm),
-        j: searchKeyword.value,
-        k: searchKeyword.value
+        i: getOSSUrl("static/icons/search.png", "icon"),
+        j: common_vendor.o(onIconError),
+        k: common_vendor.o([($event) => searchKeyword.value = $event.detail.value, onSearchInput]),
+        l: common_vendor.o(handleSearchConfirm),
+        m: searchKeyword.value,
+        n: searchKeyword.value
       }, searchKeyword.value ? {
-        l: common_assets._imports_2$3,
-        m: common_vendor.o(clearSearch)
+        o: getOSSUrl("static/icons/close.png", "small-icon"),
+        p: common_vendor.o(onIconError),
+        q: common_vendor.o(clearSearch)
       } : {}, {
-        n: isSearching.value
+        r: isSearching.value
       }, isSearching.value ? {} : searchResults.value.length > 0 ? {
-        p: common_vendor.f(searchResults.value, (bird, index, i0) => {
+        t: common_vendor.f(searchResults.value, (bird, index, i0) => {
           return {
-            a: bird.imageUrl,
-            b: common_vendor.t(bird.name),
-            c: common_vendor.t(bird.scientificName),
-            d: common_vendor.f(bird.tags, (tag, k1, i1) => {
+            a: getOSSUrl(bird.imageUrl, "medium"),
+            b: common_vendor.o(onImageError, bird.id),
+            c: common_vendor.t(bird.name),
+            d: common_vendor.t(bird.scientificName),
+            e: common_vendor.f(bird.tags, (tag, k1, i1) => {
               return {
                 a: common_vendor.t(tag),
                 b: tag
               };
             }),
-            e: bird.id,
-            f: common_vendor.o(($event) => selectBird(bird), bird.id),
-            g: `${index * 0.1}s`
+            f: bird.id,
+            g: common_vendor.o(($event) => selectBird(bird), bird.id),
+            h: `${index * 0.1}s`
           };
         })
       } : searchKeyword.value && !isSearching.value ? {
-        r: common_assets._imports_3$3
+        w: getOSSUrl("static/icons/no-search-results.png", "large"),
+        x: common_vendor.o(onIconError)
       } : {
-        s: common_assets._imports_4$3
+        y: getOSSUrl("static/icons/search-placeholder.png", "large"),
+        z: common_vendor.o(onIconError)
       }, {
-        o: searchResults.value.length > 0,
-        q: searchKeyword.value && !isSearching.value
+        s: searchResults.value.length > 0,
+        v: searchKeyword.value && !isSearching.value
       }) : common_vendor.e({
-        t: common_vendor.t(currentDisplayPage.value),
-        v: common_vendor.t(safeTotalCards.value),
-        w: `${safeTotalCards.value > 0 ? currentDisplayPage.value / safeTotalCards.value * 100 : 0}%`,
-        x: safeCurrentIndex.value < safeTotalCards.value - 1 && safeTotalCards.value > 1
+        A: common_vendor.t(currentDisplayPage.value),
+        B: common_vendor.t(safeTotalCards.value),
+        C: `${safeTotalCards.value > 0 ? currentDisplayPage.value / safeTotalCards.value * 100 : 0}%`,
+        D: safeCurrentIndex.value < safeTotalCards.value - 1 && safeTotalCards.value > 1
       }, safeCurrentIndex.value < safeTotalCards.value - 1 && safeTotalCards.value > 1 ? {
-        y: common_vendor.o(onCardLike),
-        z: common_vendor.o(onCardShare),
-        A: common_vendor.p({
+        E: common_vendor.o(onCardLike),
+        F: common_vendor.o(onCardShare),
+        G: common_vendor.p({
           ["bird-data"]: birdCards.value[safeCurrentIndex.value + 1],
           ["is-active"]: false
         }),
-        B: common_vendor.s(backgroundCardStyle.value)
+        H: common_vendor.s(backgroundCardStyle.value)
       } : {}, {
-        C: safeTotalCards.value > 0 && birdCards.value[safeCurrentIndex.value]
+        I: safeTotalCards.value > 0 && birdCards.value[safeCurrentIndex.value]
       }, safeTotalCards.value > 0 && birdCards.value[safeCurrentIndex.value] ? {
-        D: common_vendor.o(onCardLike),
-        E: common_vendor.o(onCardShare),
-        F: common_vendor.p({
+        J: common_vendor.o(onCardLike),
+        K: common_vendor.o(onCardShare),
+        L: common_vendor.p({
           ["bird-data"]: birdCards.value[safeCurrentIndex.value],
           ["is-active"]: true
         }),
-        G: common_vendor.s(currentCardStyle.value),
-        H: isFlipping.value ? 1 : ""
+        M: common_vendor.s(currentCardStyle.value),
+        N: isFlipping.value ? 1 : ""
       } : {}, {
-        I: common_vendor.o(onTouchStart),
-        J: common_vendor.o(onTouchMove),
-        K: common_vendor.o(onTouchEnd),
-        L: common_assets._imports_5$3,
-        M: common_assets._imports_6$3,
-        N: isFlipping.value ? 1 : "",
-        O: common_assets._imports_7$2,
-        P: !canGoPrevious.value ? 1 : "",
-        Q: common_vendor.o(previousCard),
-        R: common_vendor.t(currentDisplayPage.value),
-        S: common_vendor.t(safeTotalCards.value),
-        T: common_assets._imports_8$1,
-        U: !canGoNext.value ? 1 : "",
-        V: common_vendor.o(nextCard)
+        O: common_vendor.o(onTouchStart),
+        P: common_vendor.o(onTouchMove),
+        Q: common_vendor.o(onTouchEnd),
+        R: getOSSUrl("static/icons/swipe-up.png", "small-icon"),
+        S: common_vendor.o(onIconError),
+        T: getOSSUrl("static/icons/tap.png", "small-icon"),
+        U: common_vendor.o(onIconError),
+        V: isFlipping.value ? 1 : "",
+        W: getOSSUrl("static/icons/prev.png", "small-icon"),
+        X: common_vendor.o(onIconError),
+        Y: !canGoPrevious.value ? 1 : "",
+        Z: common_vendor.o(previousCard),
+        aa: common_vendor.t(currentDisplayPage.value),
+        ab: common_vendor.t(safeTotalCards.value),
+        ac: getOSSUrl("static/icons/next.png", "small-icon"),
+        ad: common_vendor.o(onIconError),
+        ae: !canGoNext.value ? 1 : "",
+        af: common_vendor.o(nextCard)
       }));
     };
   }

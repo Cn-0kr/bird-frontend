@@ -43,27 +43,6 @@
 			}
 		},
 		{
-			"path" : "pages/PosterPage/PosterPage",
-			"style" : 
-			{
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path" : "pages/AnalyzeResultPage/AnalyzeResultPage",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		},
-		{
-			"path" : "pages/AnalyzeWaitingPage/AnalyzeWaitingPage",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
-			}
-		},
-		{
 			"path" : "pages/AIChat/AIChat",
 			"style" : 
 			{

@@ -116,7 +116,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 
 // ========== Props定义 ==========
 const props = defineProps({
@@ -204,11 +204,20 @@ const isTextTruncated = computed(() => {
 
 // 所有图片URL的计算属性
 const posterImageUrl = computed(() => {
+  // 如果 imageUrl 已经是完整的 OSS URL，直接返回
+  if (props.posterData.imageUrl && props.posterData.imageUrl.includes(ossConfig.baseUrl)) {
+    return props.posterData.imageUrl;
+  }
+  // 否则，生成 OSS URL
   return getOSSUrl(props.posterData.imageUrl, 'medium');
 });
 
 const authorAvatarUrl = computed(() => {
   const avatarPath = props.posterData.author?.avatar || 'static/avatars/default.png';
+  // 如果已经是完整的 OSS URL，直接返回
+  if (avatarPath.includes(ossConfig.baseUrl)) {
+    return avatarPath;
+  }
   return getOSSUrl(avatarPath, 'avatar');
 });
 
@@ -219,6 +228,15 @@ const shareIconUrl = computed(() => getOSSUrl('static/icons/share.png', 'icon'))
 const likeIconUrl = computed(() => {
   const iconPath = isLiked.value ? 'static/icons/thumbs-up-filled.png' : 'static/icons/thumbs-up.png';
   return getOSSUrl(iconPath, 'icon');
+});
+
+// ========== 监听器 ==========
+// 监听 posterData.imageUrl 的变化，确保图片URL更新时重新加载
+watch(() => props.posterData.imageUrl, (newUrl) => {
+  if (newUrl) {
+    // 当图片URL变化时，重置加载状态
+    imageLoading.value = true;
+  }
 });
 
 // ========== 事件处理函数 ==========
@@ -236,6 +254,9 @@ const onImageLoad = () => {
 const onImageError = () => {
   imageLoading.value = false;
   console.error('图片加载失败:', props.posterData.imageUrl);
+  
+  // 可以在这里设置一个默认的错误图片
+  // 例如：emit('imageError', props.posterData);
 };
 
 /**
@@ -337,11 +358,13 @@ const formatNumber = (num) => {
 
 // ========== 生命周期 ==========
 onMounted(() => {
-  // 随机延迟一些时间来创建更自然的加载效果
-  const delay = Math.random() * 300;
-  setTimeout(() => {
-    imageLoading.value = false;
-  }, delay);
+  // 移除原来的随机延迟设置 imageLoading 的逻辑
+  // 让 imageLoading 的状态完全由图片的实际加载状态控制
+  
+  // 如果组件挂载时就有图片URL，确保加载状态为 true
+  if (props.posterData.imageUrl) {
+    imageLoading.value = true;
+  }
 });
 </script>
 

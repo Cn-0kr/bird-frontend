@@ -8,9 +8,6 @@ if (!Math) {
   "./pages/ProfilePage/ProfilePage.js";
   "./pages/RankingPage/RankingPage.js";
   "./pages/NoobPage/NoobPage.js";
-  "./pages/PosterPage/PosterPage.js";
-  "./pages/AnalyzeResultPage/AnalyzeResultPage.js";
-  "./pages/AnalyzeWaitingPage/AnalyzeWaitingPage.js";
   "./pages/AIChat/AIChat.js";
   "./pages/BirdEncyclopedia/BirdEncyclopedia.js";
 }

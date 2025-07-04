@@ -3,7 +3,7 @@
       <!-- 自定义导航栏 -->
       <view class="custom-navbar">
         <view class="navbar-left" @click="goBack">
-          <image src="/static/icons/back.png" class="back-icon"></image>
+          <image :src="getOSSUrl('static/icons/back.png', 'icon')" class="back-icon" @error="onIconError"></image>
         </view>
         <text class="navbar-title">鸟类图鉴</text>
         <view class="navbar-right">
@@ -13,8 +13,9 @@
             :class="{ 'mode-switch-active': currentMode === 'general' }"
           >
             <image 
-              :src="currentMode === 'search' ? '/static/icons/book.png' : '/static/icons/search.png'" 
+              :src="getOSSUrl(currentMode === 'search' ? 'static/icons/book.png' : 'static/icons/search.png', 'icon')" 
               class="mode-icon"
+              @error="onIconError"
             ></image>
           </view>
         </view>
@@ -25,7 +26,7 @@
         <!-- 搜索栏 -->
         <view class="search-section">
           <view class="search-input-wrapper">
-            <image src="/static/icons/search.png" class="search-icon"></image>
+            <image :src="getOSSUrl('static/icons/search.png', 'icon')" class="search-icon" @error="onIconError"></image>
             <input 
               type="text" 
               placeholder="搜索鸟类名称或特征..."
@@ -40,7 +41,7 @@
               class="clear-btn" 
               @click="clearSearch"
             >
-              <image src="/static/icons/close.png" class="clear-icon"></image>
+              <image :src="getOSSUrl('static/icons/close.png', 'small-icon')" class="clear-icon" @error="onIconError"></image>
             </view>
           </view>
         </view>
@@ -60,7 +61,7 @@
               @click="selectBird(bird)"
               :style="{ 'animation-delay': `${index * 0.1}s` }"
             >
-              <image :src="bird.imageUrl" class="result-image" mode="aspectFill"></image>
+              <image :src="getOSSUrl(bird.imageUrl, 'medium')" class="result-image" mode="aspectFill" @error="onImageError"></image>
               <view class="result-content">
                 <text class="result-name">{{ bird.name }}</text>
                 <text class="result-scientific">{{ bird.scientificName }}</text>
@@ -72,13 +73,13 @@
           </view>
   
           <view v-else-if="searchKeyword && !isSearching" class="no-results">
-            <image src="/static/icons/no-search-results.png" class="no-results-icon"></image>
+            <image :src="getOSSUrl('static/icons/no-search-results.png', 'large')" class="no-results-icon" @error="onIconError"></image>
             <text class="no-results-text">未找到相关鸟类</text>
             <text class="no-results-subtitle">尝试搜索其他关键词</text>
           </view>
   
           <view v-else class="search-placeholder">
-            <image src="/static/icons/search-placeholder.png" class="placeholder-icon"></image>
+            <image :src="getOSSUrl('static/icons/search-placeholder.png', 'large')" class="placeholder-icon" @error="onIconError"></image>
             <text class="placeholder-text">输入鸟类名称开始搜索</text>
             <text class="placeholder-subtitle">支持中文名、英文名或特征描述</text>
           </view>
@@ -140,11 +141,11 @@
         <!-- 操作提示 -->
         <view class="operation-tips" :class="{ 'tips-hidden': isFlipping }">
           <view class="tip-item">
-            <image src="/static/icons/swipe-up.png" class="tip-icon"></image>
+            <image :src="getOSSUrl('static/icons/swipe-up.png', 'small-icon')" class="tip-icon" @error="onIconError"></image>
             <text class="tip-text">上滑查看下一张</text>
           </view>
           <view class="tip-item">
-            <image src="/static/icons/tap.png" class="tip-icon"></image>
+            <image :src="getOSSUrl('static/icons/tap.png', 'small-icon')" class="tip-icon" @error="onIconError"></image>
             <text class="tip-text">点击卡片查看详情</text>
           </view>
         </view>
@@ -156,7 +157,7 @@
             :class="{ 'btn-disabled': !canGoPrevious }"
             @click="previousCard"
           >
-            <image src="/static/icons/prev.png" class="action-icon"></image>
+            <image :src="getOSSUrl('static/icons/prev.png', 'small-icon')" class="action-icon" @error="onIconError"></image>
             <text class="action-text">上一张</text>
           </view>
   
@@ -172,7 +173,7 @@
             @click="nextCard"
           >
             <text class="action-text">下一张</text>
-            <image src="/static/icons/next.png" class="action-icon"></image>
+            <image :src="getOSSUrl('static/icons/next.png', 'small-icon')" class="action-icon" @error="onIconError"></image>
           </view>
         </view>
       </view>
@@ -180,7 +181,7 @@
   </template>
   
   <script setup>
-  import { ref, onMounted, computed, watch } from 'vue';
+  import { ref, computed, onMounted, nextTick, watch } from 'vue';
   import BirdKnowledgeCard from '@/components/BirdKnowledgeCard.vue';
   
   // ========== 响应式数据 ==========
@@ -190,6 +191,49 @@
   const searchResults = ref([]);
   const currentCardIndex = ref(0); // 确保始终为数字类型
   const birdCards = ref([]);
+  
+  // ========== OSS配置 ==========
+  const ossConfig = {
+    baseUrl: 'https://birdfront-oss.oss-cn-shanghai.aliyuncs.com'
+  };
+  
+  // ========== OSS工具方法 ==========
+  /**
+   * 获取OSS图片URL
+   * @param {string} filename - 文件名
+   * @param {string} size - 尺寸类型
+   * @returns {string} 完整的OSS URL
+   */
+  const getOSSUrl = (filename, size = 'icon') => {
+    if (!filename) return '';
+    
+    // 确保文件名不以斜杠开头
+    const cleanFilename = filename.startsWith('/') ? filename.slice(1) : filename;
+    
+    // 根据尺寸类型设置不同的处理参数
+    let params = '';
+    switch(size) {
+      case 'icon':
+        params = '?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90';
+        break;
+      case 'small-icon':
+        params = '?x-oss-process=image/resize,m_lfit,w_32,h_32/quality,q_90';
+        break;
+      case 'medium':
+        params = '?x-oss-process=image/resize,m_lfit,w_200,h_200/quality,q_85';
+        break;
+      case 'large':
+        params = '?x-oss-process=image/resize,m_lfit,w_120,h_120/quality,q_90';
+        break;
+      case 'bird-image':
+        params = '?x-oss-process=image/resize,m_lfit,w_600,h_400/quality,q_85';
+        break;
+      default:
+        params = '?x-oss-process=image/resize,m_lfit,w_48,h_48/quality,q_90';
+    }
+    
+    return `${ossConfig.baseUrl}/${cleanFilename}${params}`;
+  };
   
   // ========== 卡片翻页动画相关状态 ==========
   const isFlipping = ref(false);
@@ -207,7 +251,7 @@
       id: 1,
       name: '巨嘴鸟',
       scientificName: 'Ramphastos sulfuratus',
-      imageUrl: '/static/birds/toucan.jpg',
+      imageUrl: 'static/birds/toucan.jpg',
       tags: ['热带鸟类', '彩色', '大型'],
       habitat: '热带雨林',
       size: '体长50-65cm',
@@ -236,7 +280,7 @@
       id: 2,
       name: '蜂鸟',
       scientificName: 'Trochilidae',
-      imageUrl: '/static/birds/hummingbird.jpg',
+      imageUrl: 'static/birds/hummingbird.jpg',
       tags: ['小型鸟类', '快速', '悬停'],
       habitat: '花园、森林边缘',
       size: '体长5-25cm',
@@ -266,7 +310,7 @@
       id: 3,
       name: '孔雀',
       scientificName: 'Pavo cristatus',
-      imageUrl: '/static/birds/peacock.jpg',
+      imageUrl: 'static/birds/peacock.jpg',
       tags: ['大型鸟类', '华丽', '地栖'],
       habitat: '森林、公园、农田',
       size: '体长100-115cm',
@@ -296,7 +340,7 @@
       id: 4,
       name: '老鹰',
       scientificName: 'Aquila chrysaetos',
-      imageUrl: '/static/birds/eagle.jpg',
+      imageUrl: 'static/birds/eagle.jpg',
       tags: ['猛禽', '大型', '捕食者'],
       habitat: '山地、草原、森林',
       size: '体长75-100cm',
@@ -662,6 +706,24 @@
         icon: 'error'
       });
     }
+  };
+  
+  /**
+   * 图标加载失败处理
+   * @param {Event} error - 错误事件
+   */
+  const onIconError = (error) => {
+    console.warn('图标加载失败:', error);
+    // 可以设置默认图标或其他降级处理
+  };
+  
+  /**
+   * 图片加载失败处理
+   * @param {Event} error - 错误事件
+   */
+  const onImageError = (error) => {
+    console.warn('图片加载失败:', error);
+    // 可以设置默认图片或其他降级处理
   };
   
   // ========== 监听器 ==========

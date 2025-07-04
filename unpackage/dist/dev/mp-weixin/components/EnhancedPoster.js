@@ -67,11 +67,17 @@ const _sfc_main = {
       return props.posterData.description && props.posterData.description.length > 50;
     });
     const posterImageUrl = common_vendor.computed(() => {
+      if (props.posterData.imageUrl && props.posterData.imageUrl.includes(ossConfig.baseUrl)) {
+        return props.posterData.imageUrl;
+      }
       return getOSSUrl(props.posterData.imageUrl, "medium");
     });
     const authorAvatarUrl = common_vendor.computed(() => {
       var _a;
       const avatarPath = ((_a = props.posterData.author) == null ? void 0 : _a.avatar) || "static/avatars/default.png";
+      if (avatarPath.includes(ossConfig.baseUrl)) {
+        return avatarPath;
+      }
       return getOSSUrl(avatarPath, "avatar");
     });
     const locationIconUrl = common_vendor.computed(() => getOSSUrl("static/icons/location.png", "icon"));
@@ -81,12 +87,17 @@ const _sfc_main = {
       const iconPath = isLiked.value ? "static/icons/thumbs-up-filled.png" : "static/icons/thumbs-up.png";
       return getOSSUrl(iconPath, "icon");
     });
+    common_vendor.watch(() => props.posterData.imageUrl, (newUrl) => {
+      if (newUrl) {
+        imageLoading.value = true;
+      }
+    });
     const onImageLoad = () => {
       imageLoading.value = false;
     };
     const onImageError = () => {
       imageLoading.value = false;
-      common_vendor.index.__f__("error", "at components/EnhancedPoster.vue:238", "图片加载失败:", props.posterData.imageUrl);
+      common_vendor.index.__f__("error", "at components/EnhancedPoster.vue:256", "图片加载失败:", props.posterData.imageUrl);
     };
     const onTouchStart = () => {
       isPressed.value = true;
@@ -142,10 +153,9 @@ const _sfc_main = {
       return num.toString();
     };
     common_vendor.onMounted(() => {
-      const delay = Math.random() * 300;
-      setTimeout(() => {
-        imageLoading.value = false;
-      }, delay);
+      if (props.posterData.imageUrl) {
+        imageLoading.value = true;
+      }
     });
     return (_ctx, _cache) => {
       var _a;
